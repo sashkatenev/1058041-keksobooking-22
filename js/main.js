@@ -30,3 +30,7 @@ const getRandomFloat = function (lowerBound = 0, upperBound = 0, decimalPlaces =
   }
   return isNaN(result) ? null : result;
 }
+
+alert(getRandomInt(1, 10));
+
+alert(getRandomFloat(1.11, 1.12, 3));
