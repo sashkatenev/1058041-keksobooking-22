@@ -1,6 +1,10 @@
 'use strict';
 
-const getRandomInt = (lowerBound = 0, upperBound = 0) => {
+const DEFAULT_LOWER_BOUND = 0;
+const DEFAULT_UPPER_BOUND = 1;
+const DEFAULT_DECIMAL_PLACES = 3;
+
+const getRandomInt = (lowerBound = DEFAULT_LOWER_BOUND, upperBound = DEFAULT_UPPER_BOUND) => {
   let result = null;
   if (Number.isInteger(lowerBound) && Number.isInteger(upperBound) && upperBound >= lowerBound) {
     result = Math.round(Math.random() * (upperBound - lowerBound)) + lowerBound;
@@ -8,7 +12,7 @@ const getRandomInt = (lowerBound = 0, upperBound = 0) => {
   return result;
 }
 
-const getRandomFloat = (lowerBound = 0, upperBound = 0, decimalPlaces = 0) => {
+const getRandomFloat = (lowerBound = DEFAULT_LOWER_BOUND, upperBound = DEFAULT_UPPER_BOUND, decimalPlaces = DEFAULT_DECIMAL_PLACES) => {
   let result = null;
   if (upperBound >= lowerBound && Number.isInteger(decimalPlaces)) {
     result = Math.random() * (upperBound - lowerBound) + lowerBound;
@@ -19,6 +23,10 @@ const getRandomFloat = (lowerBound = 0, upperBound = 0, decimalPlaces = 0) => {
   return isNaN(result) ? null : result;
 }
 
-alert(getRandomInt(1, 10));
+// alert(getRandomInt(1, 10));
 
-alert(getRandomFloat(1.11, 1.12, 3));
+// alert(getRandomFloat(1.11, 1.12, 3));
+
+for (let i = 0; i < 10; i++) {
+  console.log(getRandomFloat());
+}
