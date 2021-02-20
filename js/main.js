@@ -12,6 +12,24 @@ const MIN_LATITUDE = 35.65;
 const MAX_LATITUDE = 35.7;
 const MIN_LONGITUDE = 139.7;
 const MAX_LONGITUDE = 139.8;
+const OFFER_TITLE_TEMPLATE = 'Предложение №';
+const MAX_PRICE = 100000;
+const MAX_ROOMS = 10;
+const MAX_GUESTS = 5;
+const HOUSE_DESCRIPTION = 'Описание помещения ';
+
+const HOUSING_TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungalow'
+];
+
+const CHECK_POINTS = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
 
 const getRandomInt = (...args) => {
   let lowerBound = args[0] || DEFAULT_LOWER_BOUND;
@@ -48,9 +66,9 @@ const getRandomFloat = (...args) => {
   return isNaN(result) ? null : result;
 }
 
-// alert(getRandomInt(1, 10));
-
-// alert(getRandomFloat(1.11, 1.12, 3));
+const getRandomArrayElement = (elements) => {
+  return elements[getRandomInt(0, elements.length - 1)];
+};
 
 const zeroPad = (number, lengthNumber) => {
   return (Array(lengthNumber).fill('0') + number).slice(-lengthNumber);
@@ -74,21 +92,61 @@ class Location {
   }
 }
 
+class Offer {
+  constructor(title, address, price, type, rooms, guests, checkin, checkout, features, description, photos) {
+    // this.owner = null;
+    this.title = title + ++Offer.staticCounter;
+    this.address = address;
+    this.price = price;
+    this.type = type;
+    this.rooms = rooms;
+    this.guests = guests;
+    this.checkin = checkin;
+    this.checkout = checkout;
+    this.features = features;
+    this.description = description + Offer.staticCounter;
+    this.photos = photos;
+  }
+}
+
+Offer.staticCounter = 0;
+
 class SimilarNearAd {
-  constructor (author, location) {
+  constructor(author, offer, location) {
     this.author = author;
+    this.offer = offer;
     this.location = location;
   }
+
+  // getLocation() {
+  //   return `${this.location.x}, ${this.location.y}`;
+  // }
 }
 
 const createAd = () => {
   const author = new Author(getRandomAvatarFileName(AVATAR_FILENAME_TEMPLATE));
   const location = new Location(getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5), getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5));
+  const offer = new Offer(
+    OFFER_TITLE_TEMPLATE,
+    `${location.x}, ${location.y}`,
+    getRandomInt(MAX_PRICE),
+    getRandomArrayElement(HOUSING_TYPES),
+    getRandomInt(1, MAX_ROOMS),
+    getRandomInt(MAX_GUESTS),
+    getRandomArrayElement(CHECK_POINTS),
+    getRandomArrayElement(CHECK_POINTS),
+    [],
+    HOUSE_DESCRIPTION,
+    []
+  );
 
   const similarNearAd = new SimilarNearAd(
     author,
+    offer,
     location
   );
+
+  // offer.owner = similarNearAd;
 
   return similarNearAd;
 };
