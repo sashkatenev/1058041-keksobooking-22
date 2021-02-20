@@ -8,6 +8,10 @@ const AVATAR_FILENAME_TEMPLATE = 'img/avatars/user{xx}.png';
 const MIN_USER_NUMBER = 1;
 const MAX_USER_NUMBER = 8;
 const USER_NUMBER_DIGITS = 2;
+const MIN_LATITUDE = 35.65;
+const MAX_LATITUDE = 35.7;
+const MIN_LONGITUDE = 139.7;
+const MAX_LONGITUDE = 139.8;
 
 const getRandomInt = (...args) => {
   let lowerBound = args[0] || DEFAULT_LOWER_BOUND;
@@ -63,17 +67,27 @@ class Author {
   }
 }
 
+class Location {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
 class SimilarNearAd {
-  constructor (author) {
+  constructor (author, location) {
     this.author = author;
+    this.location = location;
   }
 }
 
 const createAd = () => {
   const author = new Author(getRandomAvatarFileName(AVATAR_FILENAME_TEMPLATE));
+  const location = new Location(getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5), getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5));
 
   const similarNearAd = new SimilarNearAd(
-    author
+    author,
+    location
   );
 
   return similarNearAd;
