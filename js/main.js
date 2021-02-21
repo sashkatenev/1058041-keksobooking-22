@@ -24,13 +24,13 @@ const HOUSING_TYPES = [
   'palace',
   'flat',
   'house',
-  'bungalow'
+  'bungalow',
 ];
 
 const CHECK_POINTS = [
   '12:00',
   '13:00',
-  '14:00'
+  '14:00',
 ];
 
 const FEATURES = [
@@ -39,7 +39,7 @@ const FEATURES = [
   'parking',
   'washer',
   'elevator',
-  'conditioner'
+  'conditioner',
 ];
 
 const getRandomInt = (...args) => {
@@ -94,13 +94,9 @@ const getRandomAvatar = (template) => {
   return template.replace('{xx}', userNumber);
 };
 
-// const getStringFromTemplate = (template, insert) => {
-//   return template.replace('{xx}', insert);
+// const getRandomStringArrayFromTemplate = (count, template) => {
+//   return getRandomSetOfItems(Array(count).fill(null).map((value, index) => template.replace('{number}', index + 1)));
 // };
-
-const getRandomStringArrayFromTemplate = (count, template) => {
-  return getRandomSetOfItems(Array(count).fill(null).map((value, index) => template.replace('{number}', index + 1)));
-};
 
 class Author {
   constructor (avatar) {
@@ -150,8 +146,10 @@ const createAd = () => {
   const author = new Author(getRandomAvatar(AVATAR_FILENAME_TEMPLATE));
   // const author = new Author(getStringFromTemplate(AVATAR_FILENAME_TEMPLATE, zeroPad(getRandomInt(MIN_USER_NUMBER, MAX_USER_NUMBER), USER_NUMBER_DIGITS)));
 
-  const location = new Location(getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5),
-                                getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5));
+  const location = new Location(
+    getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5),
+    getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5),
+  );
 
   const offer = new Offer(
     OFFER_TITLE_TEMPLATE,
@@ -166,13 +164,13 @@ const createAd = () => {
     HOUSE_DESCRIPTION,
     // getRandomStringArrayFromTemplate(PHOTO_COUNT, PHOTO_FILENAME_TEMPLATE)
     getRandomSetOfItems(Array(PHOTO_COUNT).fill(null)
-      .map((value, index) => PHOTO_FILENAME_TEMPLATE.replace('{number}', index + 1)))
+      .map((value, index) => PHOTO_FILENAME_TEMPLATE.replace('{number}', index + 1))),
   );
 
   const similarNearAd = new SimilarNearAd(
     author,
     offer,
-    location
+    location,
   );
 
   // offer.owner = similarNearAd;
@@ -182,4 +180,5 @@ const createAd = () => {
 
 let similarNearAds = new Array(SIMILAR_AD_COUNT).fill(null).map(() => createAd());
 
-console.log(similarNearAds);
+// console.log(similarNearAds);
+alert(similarNearAds);
