@@ -17,6 +17,8 @@ const MAX_PRICE = 100000;
 const MAX_ROOMS = 10;
 const MAX_GUESTS = 5;
 const HOUSE_DESCRIPTION = 'Описание помещения ';
+const PHOTO_FILENAME_TEMPLATE = 'http://o0.github.io/assets/images/tokyo/hotel{number}.jpg'
+const PHOTO_COUNT = 3;
 
 const HOUSING_TYPES = [
   'palace',
@@ -29,6 +31,15 @@ const CHECK_POINTS = [
   '12:00',
   '13:00',
   '14:00'
+];
+
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
 ];
 
 const getRandomInt = (...args) => {
@@ -66,17 +77,29 @@ const getRandomFloat = (...args) => {
   return isNaN(result) ? null : result;
 }
 
-const getRandomArrayElement = (elements) => {
-  return elements[getRandomInt(0, elements.length - 1)];
+const getRandomArrayItem = (items) => {
+  return items[getRandomInt(0, items.length - 1)];
 };
 
-const zeroPad = (number, lengthNumber) => {
-  return (Array(lengthNumber).fill('0') + number).slice(-lengthNumber);
+const getRandomSetOfItems = (items) => {
+  return items.slice().filter(() => getRandomInt(1) === 1);  // 0 or 1 (50%)
+};
+
+const zeroPad = (number, numberDigits) => {
+  return (Array(numberDigits).fill('0') + number).slice(-numberDigits);
 }
 
-const getRandomAvatarFileName = (template) => {
+const getRandomAvatar = (template) => {
   let userNumber = zeroPad(getRandomInt(MIN_USER_NUMBER, MAX_USER_NUMBER), USER_NUMBER_DIGITS);
-  return `${template.replace('{xx}', userNumber)}`;
+  return template.replace('{xx}', userNumber);
+};
+
+// const getStringFromTemplate = (template, insert) => {
+//   return template.replace('{xx}', insert);
+// };
+
+const getRandomStringArrayFromTemplate = (count, template) => {
+  return getRandomSetOfItems(Array(count).fill(null).map((value, index) => template.replace('{number}', index + 1)));
 };
 
 class Author {
@@ -124,20 +147,26 @@ class SimilarNearAd {
 }
 
 const createAd = () => {
-  const author = new Author(getRandomAvatarFileName(AVATAR_FILENAME_TEMPLATE));
-  const location = new Location(getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5), getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5));
+  const author = new Author(getRandomAvatar(AVATAR_FILENAME_TEMPLATE));
+  // const author = new Author(getStringFromTemplate(AVATAR_FILENAME_TEMPLATE, zeroPad(getRandomInt(MIN_USER_NUMBER, MAX_USER_NUMBER), USER_NUMBER_DIGITS)));
+
+  const location = new Location(getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5),
+                                getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5));
+
   const offer = new Offer(
     OFFER_TITLE_TEMPLATE,
     `${location.x}, ${location.y}`,
     getRandomInt(MAX_PRICE),
-    getRandomArrayElement(HOUSING_TYPES),
+    getRandomArrayItem(HOUSING_TYPES),
     getRandomInt(1, MAX_ROOMS),
     getRandomInt(MAX_GUESTS),
-    getRandomArrayElement(CHECK_POINTS),
-    getRandomArrayElement(CHECK_POINTS),
-    [],
+    getRandomArrayItem(CHECK_POINTS),
+    getRandomArrayItem(CHECK_POINTS),
+    getRandomSetOfItems(FEATURES),
     HOUSE_DESCRIPTION,
-    []
+    // getRandomStringArrayFromTemplate(PHOTO_COUNT, PHOTO_FILENAME_TEMPLATE)
+    getRandomSetOfItems(Array(PHOTO_COUNT).fill(null)
+      .map((value, index) => PHOTO_FILENAME_TEMPLATE.replace('{number}', index + 1)))
   );
 
   const similarNearAd = new SimilarNearAd(
