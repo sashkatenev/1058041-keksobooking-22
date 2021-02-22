@@ -43,8 +43,7 @@ const FEATURES = [
 ];
 
 const getRandomInt = (...args) => {
-  let lowerBound = args[0] || DEFAULT_LOWER_BOUND;
-  let upperBound = args[1] || DEFAULT_UPPER_BOUND;
+  let [lowerBound = DEFAULT_LOWER_BOUND, upperBound = DEFAULT_UPPER_BOUND] = args;
   let result = null;
   if (args.length == 1) {
     if (lowerBound > 0) {
@@ -59,9 +58,8 @@ const getRandomInt = (...args) => {
 }
 
 const getRandomFloat = (...args) => {
-  let lowerBound = args[0] || DEFAULT_LOWER_BOUND;
-  let upperBound = args[1] || DEFAULT_UPPER_BOUND;
-  const decimalPlaces = args[2] || DEFAULT_DECIMAL_PLACES;
+  let [lowerBound = DEFAULT_LOWER_BOUND, upperBound = DEFAULT_UPPER_BOUND] = args;
+  const [, , decimalPlaces = DEFAULT_DECIMAL_PLACES] = args;
   let result = null;
   if (args.length == 1) {
     if (lowerBound > 0) {
@@ -98,87 +96,50 @@ const getRandomAvatar = (template) => {
 //   return getRandomSetOfItems(Array(count).fill(null).map((value, index) => template.replace('{number}', index + 1)));
 // };
 
-class Author {
-  constructor (avatar) {
-    this.avatar = avatar;
-  }
-}
+const createAuthor = () => ({
+  avatar: getRandomAvatar(AVATAR_FILENAME_TEMPLATE),
+});
 
-class Location {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-}
+const createLocation = () => ({
+  x: getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5),
+  y: getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5),
+});
 
-class Offer {
-  constructor(title, address, price, type, rooms, guests, checkin, checkout, features, description, photos) {
-    // this.owner = null;
-    this.title = title + ++Offer.staticCounter;
-    this.address = address;
-    this.price = price;
-    this.type = type;
-    this.rooms = rooms;
-    this.guests = guests;
-    this.checkin = checkin;
-    this.checkout = checkout;
-    this.features = features;
-    this.description = description + Offer.staticCounter;
-    this.photos = photos;
-  }
-}
+const makeOffer = () => {
+  let adCounter = 0;
 
-Offer.staticCounter = 0;
+  return (location) => ({
+    title: OFFER_TITLE_TEMPLATE + ++adCounter,
+    address: `${location.x}, ${location.y}`,
+    price: getRandomInt(MAX_PRICE),
+    type: getRandomArrayItem(HOUSING_TYPES),
+    rooms: getRandomInt(1, MAX_ROOMS),
+    guests: getRandomInt(MAX_GUESTS),
+    checkin: getRandomArrayItem(CHECK_POINTS),
+    checkout: getRandomArrayItem(CHECK_POINTS),
+    features: getRandomSetOfItems(FEATURES),
+    description: HOUSE_DESCRIPTION + adCounter,
+    photos: getRandomSetOfItems(Array(PHOTO_COUNT).fill(null)
+      .map((value, index) => PHOTO_FILENAME_TEMPLATE.replace('{number}', index + 1))),
+  });
+};
 
-class SimilarNearAd {
-  constructor(author, offer, location) {
-    this.author = author;
-    this.offer = offer;
-    this.location = location;
-  }
-
-  // getLocation() {
-  //   return `${this.location.x}, ${this.location.y}`;
-  // }
-}
+const createOffer = makeOffer();
 
 const createAd = () => {
-  const author = new Author(getRandomAvatar(AVATAR_FILENAME_TEMPLATE));
-  // const author = new Author(getStringFromTemplate(AVATAR_FILENAME_TEMPLATE, zeroPad(getRandomInt(MIN_USER_NUMBER, MAX_USER_NUMBER), USER_NUMBER_DIGITS)));
+  const newAuthor = createAuthor();
+  const newLocation = createLocation();
+  const newOffer = createOffer(newLocation);
 
-  const location = new Location(
-    getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5),
-    getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5),
-  );
-
-  const offer = new Offer(
-    OFFER_TITLE_TEMPLATE,
-    `${location.x}, ${location.y}`,
-    getRandomInt(MAX_PRICE),
-    getRandomArrayItem(HOUSING_TYPES),
-    getRandomInt(1, MAX_ROOMS),
-    getRandomInt(MAX_GUESTS),
-    getRandomArrayItem(CHECK_POINTS),
-    getRandomArrayItem(CHECK_POINTS),
-    getRandomSetOfItems(FEATURES),
-    HOUSE_DESCRIPTION,
-    // getRandomStringArrayFromTemplate(PHOTO_COUNT, PHOTO_FILENAME_TEMPLATE)
-    getRandomSetOfItems(Array(PHOTO_COUNT).fill(null)
-      .map((value, index) => PHOTO_FILENAME_TEMPLATE.replace('{number}', index + 1))),
-  );
-
-  const similarNearAd = new SimilarNearAd(
-    author,
-    offer,
-    location,
-  );
-
-  // offer.owner = similarNearAd;
-
-  return similarNearAd;
+  return {
+    author: newAuthor,
+    offer: newOffer,
+    location: newLocation,
+  };
 };
 
 let similarNearAds = new Array(SIMILAR_AD_COUNT).fill(null).map(() => createAd());
 
 // console.log(similarNearAds);
+
 alert(similarNearAds);
