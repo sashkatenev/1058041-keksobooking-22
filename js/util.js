@@ -44,7 +44,7 @@ const getStringArrayFromTemplate = (count, template, replaceSubString) => {
 };
 
 const getRandomSetOfItems = (items) => {
-  return items.slice().filter(() => getRandomInt(1) === 1);  // 0 or 1 (50%)
+  return Array.from(items).filter(() => Math.random() > 0.5);
 };
 
 const zeroPad = (number, numberDigits) => {

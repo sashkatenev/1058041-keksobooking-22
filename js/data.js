@@ -17,12 +17,12 @@ const PHOTO_TEMPLATE_REPLACE_STRING = '{number}';
 const PHOTO_FILENAME_TEMPLATE = `http://o0.github.io/assets/images/tokyo/hotel${PHOTO_TEMPLATE_REPLACE_STRING}.jpg`;
 const PHOTO_COUNT = 3;
 
-const HOUSING_TYPES = [
-  'palace',
-  'flat',
-  'house',
-  'bungalow',
-];
+const HOUSING_TYPES = {
+  'palace': 'Дворец',
+  'flat': 'Квартира',
+  'house': 'Дом',
+  'bungalow': 'Бунгало',
+};
 
 const CHECK_POINTS = [
   '12:00',
@@ -60,7 +60,7 @@ const makeOffer = () => {
     title: OFFER_TITLE_TEMPLATE + ++adCounter,
     address: `${location.x}, ${location.y}`,
     price: getRandomInt(MAX_PRICE),
-    type: getRandomArrayItem(HOUSING_TYPES),
+    type: getRandomArrayItem(Object.keys(HOUSING_TYPES)),
     rooms: getRandomInt(1, MAX_ROOMS),
     guests: getRandomInt(MAX_GUESTS),
     checkin: getRandomArrayItem(CHECK_POINTS),
@@ -85,4 +85,4 @@ const createAd = () => {
   };
 };
 
-export default createAd;
+export { createAd, HOUSING_TYPES };
