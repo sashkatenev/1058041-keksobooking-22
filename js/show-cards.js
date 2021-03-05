@@ -2,7 +2,7 @@ import { createAd, HOUSING_TYPES } from './data.js';
 
 const fillListElement = (owner, template, datum) => {
   owner.innerHTML = '';
-  if (datum.length !== 0) {
+  if (datum.length > 0) {
     datum.forEach((item) => {
       owner.insertAdjacentHTML('beforeend', template.replace('{}', item));
     });
