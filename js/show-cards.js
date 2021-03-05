@@ -2,7 +2,7 @@ import { createAd, HOUSING_TYPES } from './data.js';
 
 const fillListElement = (owner, template, datum) => {
   owner.innerHTML = '';
-  if (datum.lengtn !== 0) {
+  if (datum.length !== 0) {
     datum.forEach((item) => {
       owner.insertAdjacentHTML('beforeend', template.replace('{}', item));
     });
@@ -22,16 +22,14 @@ const fillCard = (element, data) => {
   fillListElement(
     element.querySelector('.popup__features'),
     '<li class="popup__feature popup__feature--{}"></li>',
-    data.offer.features
-  );
+    data.offer.features);
 
   element.querySelector('.popup__description').textContent = data.offer.description;
 
   fillListElement(
     element.querySelector('.popup__photos'),
     '<img src="{}" class="popup__photo" width="45" height="40" alt="Фотография жилья">',
-    data.offer.photos
-  );
+    data.offer.photos);
 
   element.querySelector('.popup__avatar').src = data.author.avatar;
 };
