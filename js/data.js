@@ -39,10 +39,6 @@ const FEATURES = [
   'conditioner',
 ];
 
-// const getHouseItemValue = (itemKey) => {
-//   return HOUSING_TYPES[itemKey];
-// };
-
 const getRandomAvatar = (template) => {
   let userNumber = zeroPad(getRandomInt(MIN_USER_NUMBER, MAX_USER_NUMBER), USER_NUMBER_DIGITS);
   return template.replace('{xx}', userNumber);
