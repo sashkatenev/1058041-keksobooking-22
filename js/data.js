@@ -24,6 +24,13 @@ const HOUSING_TYPES = {
   'bungalow': 'Бунгало',
 };
 
+const MIN_PRICES = {
+  'palace': 10000,
+  'flat': 1000,
+  'house': 5000,
+  'bungalow': 0,
+};
+
 const CHECK_POINTS = [
   '12:00',
   '13:00',
@@ -85,4 +92,4 @@ const createAd = () => {
   };
 };
 
-export { createAd, HOUSING_TYPES };
+export { createAd, HOUSING_TYPES, MIN_PRICES };
