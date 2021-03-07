@@ -9,10 +9,22 @@ const setAdForm = () => {
   const housingTypeElement = adForm.querySelector('#type');
   priceElement.min = priceElement.placeholder = MIN_PRICES[housingTypeElement.value];
 
+  const timeInElement = adForm.querySelector('#timein');
+  const timeOutElement = adForm.querySelector('#timeout');
+
   const adFormChangeHandler = (evt) => {
-    const target = evt.target;
-    if (target === housingTypeElement) {
-      priceElement.min = priceElement.placeholder = MIN_PRICES[target.value];
+    const targetEvent = evt.target;
+
+    switch (targetEvent) {
+      case housingTypeElement:
+        priceElement.min = priceElement.placeholder = MIN_PRICES[targetEvent.value];
+        break;
+      case timeInElement:
+        timeOutElement.value = timeInElement.value;
+        break;
+      case timeOutElement:
+        timeInElement.value = timeOutElement.value;
+        break;
     }
   };
 
