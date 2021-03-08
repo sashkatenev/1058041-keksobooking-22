@@ -1,4 +1,4 @@
-import { createAd, HOUSING_TYPES } from './data.js';
+import { createAd, getHousingCaption } from './data.js';
 
 const fillListElement = (owner, template, datum) => {
   owner.innerHTML = '';
@@ -15,7 +15,7 @@ const fillCard = (element, data) => {
   element.querySelector('.popup__title').textContent = data.offer.title;
   element.querySelector('.popup__text--address').textContent = data.offer.address;
   element.querySelector('.popup__text--price').innerHTML = `${data.offer.price} <span>₽/ночь</span>`;
-  element.querySelector('.popup__type').textContent = HOUSING_TYPES[data.offer.type];
+  element.querySelector('.popup__type').textContent = getHousingCaption(data.offer.type);
   element.querySelector('.popup__text--capacity').textContent = `${data.offer.rooms} комнаты для ${data.offer.guests} гостей`;
   element.querySelector('.popup__text--time').textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
 
@@ -46,8 +46,7 @@ const showCards = (cardsCount) => {
     cardsContainer.appendChild(newPopup);
   }
 
-  const mapCanvas = document.querySelector('#map-canvas');
-  mapCanvas.appendChild(cardsContainer);
+  document.querySelector('#map-canvas').appendChild(cardsContainer);
 };
 
 export default showCards;

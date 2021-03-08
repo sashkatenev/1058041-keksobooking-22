@@ -18,11 +18,26 @@ const PHOTO_FILENAME_TEMPLATE = `http://o0.github.io/assets/images/tokyo/hotel${
 const PHOTO_COUNT = 3;
 
 const HOUSING_TYPES = {
-  'palace': 'Дворец',
-  'flat': 'Квартира',
-  'house': 'Дом',
-  'bungalow': 'Бунгало',
+  'palace': {
+    'caption': 'Дворец', minPrice: 10000,
+  },
+  'flat': {
+    'caption': 'Квартира', minPrice: 1000,
+  },
+  'house': {
+    'caption': 'Дом', minPrice: 5000,
+  },
+  'bungalow': {
+    'caption': 'Бунгало', minPrice: 0,
+  },
 };
+
+// const MIN_PRICES = {
+//   'palace': 10000,
+//   'flat': 1000,
+//   'house': 5000,
+//   'bungalow': 0,
+// };
 
 const CHECK_POINTS = [
   '12:00',
@@ -38,6 +53,14 @@ const FEATURES = [
   'elevator',
   'conditioner',
 ];
+
+const getHousingCaption = (value) => {
+  return HOUSING_TYPES[value]['caption'];
+};
+
+const getHousingMinPrice = (value) => {
+  return HOUSING_TYPES[value]['minPrice'];
+};
 
 const getRandomAvatar = (template) => {
   let userNumber = zeroPad(getRandomInt(MIN_USER_NUMBER, MAX_USER_NUMBER), USER_NUMBER_DIGITS);
@@ -85,4 +108,4 @@ const createAd = () => {
   };
 };
 
-export { createAd, HOUSING_TYPES };
+export { createAd, getHousingCaption, getHousingMinPrice };
