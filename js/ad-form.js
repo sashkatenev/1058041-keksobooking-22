@@ -1,7 +1,7 @@
 import { getHousingMinPrice } from './data.js';
 
-const setAdForm = () => {
-  const adForm = document.querySelector('.ad-form');
+const setAdForm = (className) => {
+  const adForm = document.querySelector(`.${className}`);
 
   const priceElement = adForm.querySelector('#price');
   priceElement.max = '1000000';
@@ -29,6 +29,8 @@ const setAdForm = () => {
   };
 
   adForm.addEventListener('change', adFormChangeHandler);
+
+  return adForm;
 };
 
 export default setAdForm;

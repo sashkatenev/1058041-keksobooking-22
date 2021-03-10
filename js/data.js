@@ -19,25 +19,22 @@ const PHOTO_COUNT = 3;
 
 const HOUSING_TYPES = {
   'palace': {
-    'caption': 'Дворец', minPrice: 10000,
+    'caption': 'Дворец',
+    'minPrice': 10000,
   },
   'flat': {
-    'caption': 'Квартира', minPrice: 1000,
+    'caption': 'Квартира',
+    'minPrice': 1000,
   },
   'house': {
-    'caption': 'Дом', minPrice: 5000,
+    'caption': 'Дом',
+    'minPrice': 5000,
   },
   'bungalow': {
-    'caption': 'Бунгало', minPrice: 0,
+    'caption': 'Бунгало',
+    'minPrice': 0,
   },
 };
-
-// const MIN_PRICES = {
-//   'palace': 10000,
-//   'flat': 1000,
-//   'house': 5000,
-//   'bungalow': 0,
-// };
 
 const CHECK_POINTS = [
   '12:00',
