@@ -1,4 +1,5 @@
 import setAdForm from './ad-form.js';
+import setFilterForm from './filter-form.js';
 
 const forms = {
   'ad-form': {
@@ -19,27 +20,40 @@ const getForm = (name) => {
   return forms[name]['handle'];
 };
 
-const activateForm = (key, activateFlag) => {
+const enableCollection = (collection) => {
+  collection.forEach((element) => {
+    element.removeAttribute('disabled');
+  });
+};
+
+const disableCollection = (collection) => {
+  collection.forEach((element) => {
+    element.setAttribute('disabled', '');
+  });
+};
+
+const enableForm = (key, enableFlag) => {
   const formElement = getForm(key);
   const disabledFormClassName = `${forms[key]['className']}--disabled`;
-  const fieldsets = formElement.querySelectorAll('fieldset');
-  if (activateFlag) {
+  if (enableFlag) {
     formElement.classList.remove(disabledFormClassName);
-    fieldsets.forEach((fieldset) => {
-      fieldset.removeAttribute('disabled');
-    });
+    enableCollection(formElement.querySelectorAll('fieldset'));
+    enableCollection(formElement.querySelectorAll('input'));
+    enableCollection(formElement.querySelectorAll('select'));
   } else {
     formElement.classList.add(disabledFormClassName);
-    fieldsets.forEach((fieldset) => {
-      fieldset.setAttribute('disabled', '');
-    });
+    disableCollection(formElement.querySelectorAll('fieldset'));
+    disableCollection(formElement.querySelectorAll('input'));
+    disableCollection(formElement.querySelectorAll('select'));
   }
 }
 
 const initForms = () => {
   forms['ad-form']['handle'] = setAdForm(forms['ad-form']['className']);
+  enableForm('ad-form', false);
 
-  activateForm('ad-form', false);
+  forms['filter-form']['handle'] = setFilterForm(forms['filter-form']['className']);
+  enableForm('filter-form', false);
 }
 
 
