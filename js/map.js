@@ -2,11 +2,16 @@
 
 import { getAreaCenter } from './data.js';
 
-const setMap = (className) => {
+const setMap = (className, loadMapHandler) => {
   const mapElement = document.querySelector(`.${className}`);
 
-  const map = L.map(mapElement)
-    .setView(getAreaCenter(), 10);
+  const map = L.map(mapElement);
+
+  if (loadMapHandler) {
+    map.on('load', loadMapHandler);
+  }
+
+  map.setView(getAreaCenter(), 10);
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

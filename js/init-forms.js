@@ -49,6 +49,11 @@ const enableForm = (key, enableFlag) => {
   }
 }
 
+const loadMapHandler = () => {
+  enableForm('ad-form', true);
+  enableForm('filter-form', true);
+};
+
 const initForms = () => {
   forms['ad-form']['handle'] = setAdForm(forms['ad-form']['className']);
   enableForm('ad-form', false);
@@ -56,8 +61,8 @@ const initForms = () => {
   forms['filter-form']['handle'] = setFilterForm(forms['filter-form']['className']);
   enableForm('filter-form', false);
 
-  forms['map']['handle'] = setMap(forms['map']['className']);
+  forms['map']['handle'] = setMap(forms['map']['className'], loadMapHandler);
 }
 
 
-export { initForms, getForm };
+export { initForms };
