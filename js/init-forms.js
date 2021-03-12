@@ -65,4 +65,4 @@ const initForms = () => {
 }
 
 
-export { initForms };
+export { initForms, getForm };
