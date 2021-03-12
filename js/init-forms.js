@@ -1,5 +1,6 @@
 import setAdForm from './ad-form.js';
 import setFilterForm from './filter-form.js';
+import setMap from './map.js';
 
 const forms = {
   'ad-form': {
@@ -54,6 +55,8 @@ const initForms = () => {
 
   forms['filter-form']['handle'] = setFilterForm(forms['filter-form']['className']);
   enableForm('filter-form', false);
+
+  forms['map']['handle'] = setMap(forms['map']['className']);
 }
 
 

@@ -4,10 +4,6 @@ const AVATAR_FILENAME_TEMPLATE = 'img/avatars/user{xx}.png';
 const MIN_USER_NUMBER = 1;
 const MAX_USER_NUMBER = 8;
 const USER_NUMBER_DIGITS = 2;
-const MIN_LATITUDE = 35.65;
-const MAX_LATITUDE = 35.7;
-const MIN_LONGITUDE = 139.7;
-const MAX_LONGITUDE = 139.8;
 const OFFER_TITLE_TEMPLATE = 'Предложение №';
 const MAX_PRICE = 100000;
 const MAX_ROOMS = 10;
@@ -16,6 +12,17 @@ const HOUSE_DESCRIPTION_TEMPLATE = 'Описание помещения ';
 const PHOTO_TEMPLATE_REPLACE_STRING = '{number}';
 const PHOTO_FILENAME_TEMPLATE = `http://o0.github.io/assets/images/tokyo/hotel${PHOTO_TEMPLATE_REPLACE_STRING}.jpg`;
 const PHOTO_COUNT = 3;
+
+const TARGET_AREA = {
+  startPoint: {
+    lat: 35.65,
+    lng: 139.7,
+  },
+  endPoint: {
+    lat: 35.7,
+    lng: 139.8,
+  },
+};
 
 const HOUSING_TYPES = {
   'palace': {
@@ -51,6 +58,13 @@ const FEATURES = [
   'conditioner',
 ];
 
+const getAreaCenter = () => {
+  return {
+    lat: (TARGET_AREA.startPoint.lat + TARGET_AREA.endPoint.lat) / 2,
+    lng: (TARGET_AREA.startPoint.lng + TARGET_AREA.endPoint.lng) / 2,
+  };
+};
+
 const getHousingCaption = (value) => {
   return HOUSING_TYPES[value]['caption'];
 };
@@ -69,8 +83,8 @@ const createAuthor = () => ({
 });
 
 const createLocation = () => ({
-  x: getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5),
-  y: getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5),
+  x: getRandomFloat(TARGET_AREA.startPoint.lat, TARGET_AREA.endPoint.lat, 5),
+  y: getRandomFloat(TARGET_AREA.startPoint.lng, TARGET_AREA.endPoint.lng, 5),
 });
 
 const makeOffer = () => {
@@ -105,4 +119,4 @@ const createAd = () => {
   };
 };
 
-export { createAd, getHousingCaption, getHousingMinPrice };
+export { createAd, getHousingCaption, getHousingMinPrice, getAreaCenter };
