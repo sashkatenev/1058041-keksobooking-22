@@ -1,7 +1,7 @@
 /* global L:readonly */
 
 import { getAreaCenter } from './data.js';
-import { getForm } from './init-forms.js';
+import { setAddressInput } from './ad-form.js';
 
 const setMap = (className, loadMapHandler) => {
   const mapElement = document.querySelector(`.${className}`);
@@ -12,7 +12,7 @@ const setMap = (className, loadMapHandler) => {
     map.on('load', loadMapHandler);
   }
 
-  map.setView(getAreaCenter(), 10);
+  map.setView(getAreaCenter(), 15);
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -37,13 +37,15 @@ const setMap = (className, loadMapHandler) => {
 
   mainPinMarker.addTo(map);
 
-  mainPinMarker.on('moveend', (evt) => {
-    const lat = evt.target.getLatLng().lat;
-    const lng = evt.target.getLatLng().lng;
-    getForm('ad-form').querySelector('#address').value = `${lat}, ${lng}`;
+  mainPinMarker.on('move', (evt) => {
+    const lat = parseFloat(evt.target.getLatLng().lat).toFixed(5);
+    const lng = parseFloat(evt.target.getLatLng().lng).toFixed(5);
+    setAddressInput({ lat, lng });
   });
+
+  setAddressInput(getAreaCenter());
 
   return mapElement;
 };
 
-export default setMap;
+export { setMap };

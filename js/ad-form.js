@@ -1,4 +1,7 @@
 import { getHousingMinPrice } from './data.js';
+import { getForm } from './init-forms.js';
+
+let addressElement = null;
 
 const setAdForm = (className) => {
   const adForm = document.querySelector(`.${className}`);
@@ -33,4 +36,11 @@ const setAdForm = (className) => {
   return adForm;
 };
 
-export default setAdForm;
+const setAddressInput = ({lat, lng}) => {
+  if (!addressElement) {
+    addressElement = getForm('ad-form').querySelector('#address');
+  }
+  addressElement.value = `${lat}, ${lng}`;
+};
+
+export { setAdForm, setAddressInput };

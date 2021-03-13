@@ -54,4 +54,4 @@ const zeroPad = (number, numberDigits) => {
   return (Array(numberDigits).fill('0') + number).slice(-numberDigits);
 }
 
-export { getRandomInt, getRandomFloat, getRandomArrayItem, getStringArrayFromTemplate, getRandomSetOfItems, zeroPad };
+export { getRandomInt, getRandomFloat, getRandomArrayItem, getStringArrayFromTemplate, getRandomSetOfItems, zeroPad, round };

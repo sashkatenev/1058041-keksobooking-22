@@ -1,6 +1,6 @@
-import setAdForm from './ad-form.js';
+import { setAdForm } from './ad-form.js';
 import setFilterForm from './filter-form.js';
-import setMap from './map.js';
+import { setMap } from './map.js';
 
 const forms = {
   'ad-form': {
