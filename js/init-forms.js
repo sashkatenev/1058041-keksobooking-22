@@ -35,23 +35,24 @@ const disableCollection = (collection) => {
 
 const enableForm = (key, enableFlag) => {
   const formElement = getForm(key);
-  const disabledFormClassName = `${forms[key]['className']}--disabled`;
+  const disabledFormClass = `${forms[key]['className']}--disabled`;
+  const selectors = ['fieldset', 'input', 'select'];
   if (enableFlag) {
-    formElement.classList.remove(disabledFormClassName);
-    enableCollection(formElement.querySelectorAll('fieldset'));
-    enableCollection(formElement.querySelectorAll('input'));
-    enableCollection(formElement.querySelectorAll('select'));
+    formElement.classList.remove(disabledFormClass);
+    selectors.forEach((selector) => {
+      enableCollection(formElement.querySelectorAll(selector));
+    });
   } else {
-    formElement.classList.add(disabledFormClassName);
-    disableCollection(formElement.querySelectorAll('fieldset'));
-    disableCollection(formElement.querySelectorAll('input'));
-    disableCollection(formElement.querySelectorAll('select'));
+    formElement.classList.add(disabledFormClass);
+    selectors.forEach((selector) => {
+      disableCollection(formElement.querySelectorAll(selector));
+    });
   }
 }
 
 const loadMapHandler = () => {
   enableForm('ad-form', true);
-  enableForm('filter-form', true);
+  // enableForm('filter-form', true);
 };
 
 const initForms = () => {
