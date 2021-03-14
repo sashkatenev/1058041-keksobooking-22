@@ -65,5 +65,4 @@ const initForms = () => {
   forms['map']['handle'] = setMap(forms['map']['className'], loadMapHandler);
 }
 
-
 export { initForms, getForm };

@@ -119,4 +119,16 @@ const createAd = () => {
   };
 };
 
-export { createAd, getHousingCaption, getHousingMinPrice, getAreaCenter };
+const SIMILAR_AD_COUNT = 20;
+let similarNearAds = null;
+
+const loadData = () => {
+  similarNearAds = new Array(SIMILAR_AD_COUNT).fill(null).map(() => createAd());
+  return similarNearAds;
+};
+
+const getData = () => {
+  return similarNearAds;
+};
+
+export { createAd, getHousingCaption, getHousingMinPrice, getAreaCenter, loadData, getData };

@@ -18,6 +18,7 @@ const createPinIcon = (_icon) => {
 };
 
 const createPinMarker = ({ lat, lng }, isDraggable, icon) => {
+
   return L.marker(
     { lat,
       lng,
