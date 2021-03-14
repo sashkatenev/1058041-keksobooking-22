@@ -2,6 +2,9 @@
 
 import { getAreaCenter } from './data.js';
 import { setAddressInput } from './ad-form.js';
+import { getData } from './data.js';
+
+let map = null;
 
 const MAIN_PIN_ICON = {
   iconPath: '../img/main-pin.svg',
@@ -29,10 +32,22 @@ const createPinMarker = ({ lat, lng }, isDraggable, icon) => {
   );
 };
 
+const showAdMarkers = (maxCount) => {
+  const data = getData();
+  const count = Math.max(maxCount, data.length);
+  for (let i = 0; i < count; i++) {
+    const latLng = {
+      lat: data[i].location.x,
+      lng: data[i].location.x,
+    };
+    createPinMarker(latLng, false, MAIN_PIN_ICON).addTo(map);
+  }
+};
+
 const setMap = (className, loadMapHandler) => {
   const mapElement = document.querySelector(`.${className}`);
 
-  const map = L.map(mapElement);
+  map = L.map(mapElement);
 
   if (loadMapHandler) {
     map.on('load', loadMapHandler);
@@ -61,4 +76,4 @@ const setMap = (className, loadMapHandler) => {
   return mapElement;
 };
 
-export { setMap };
+export { setMap, showAdMarkers };
