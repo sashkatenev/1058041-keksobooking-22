@@ -1,8 +1,8 @@
 /* global L:readonly */
 
-import { getAreaCenter } from './data.js';
+import { getData, getAreaCenter } from './data.js';
 import { setAddressInput } from './ad-form.js';
-import { getData } from './data.js';
+import { createCustomPopup } from './create-custom-popup.js';
 
 let map = null;
 
@@ -46,7 +46,14 @@ const showAdMarkers = (maxCount) => {
       lat: points[i].location.x,
       lng: points[i].location.y,
     };
-    createPinMarker(latLng, false, REGULAR_PIN_ICON).addTo(map);
+    createPinMarker(latLng, false, REGULAR_PIN_ICON)
+      .addTo(map)
+      .bindPopup(
+        createCustomPopup(points[i], '#card'),
+        {
+          keepInView: true,
+        },
+      );
   }
 };
 

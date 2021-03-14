@@ -1,7 +1,6 @@
-import { initForms } from './init-forms.js';
+import { initForms, enableForm } from './init-forms.js';
 import { setMap, showAdMarkers } from './map.js';
 import { loadData } from './data.js';
-import { enableForm } from './init-forms.js';
 
 const SIMILAR_AD_COUNT = 20;
 const COUNT_MARKERS_TO_SHOW = 10;
