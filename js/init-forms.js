@@ -1,6 +1,5 @@
 import { setAdForm } from './ad-form.js';
 import setFilterForm from './filter-form.js';
-import { setMap } from './map.js';
 
 const forms = {
   'ad-form': {
@@ -11,10 +10,10 @@ const forms = {
     'className': 'map__filters',
     'handle': null,
   },
-  'map': {
-    'className': 'map__canvas',
-    'handle': null,
-  },
+  // 'map': {
+  //   'className': 'map__canvas',
+  //   'handle': null,
+  // },
 }
 
 const getForm = (name) => {
@@ -50,10 +49,10 @@ const enableForm = (key, enableFlag) => {
   }
 }
 
-const loadMapHandler = () => {
-  enableForm('ad-form', true);
-  // enableForm('filter-form', true);
-};
+// const loadMapHandler = () => {
+//   enableForm('ad-form', true);
+//   // enableForm('filter-form', true);
+// };
 
 const initForms = () => {
   forms['ad-form']['handle'] = setAdForm(forms['ad-form']['className']);
@@ -62,7 +61,7 @@ const initForms = () => {
   forms['filter-form']['handle'] = setFilterForm(forms['filter-form']['className']);
   enableForm('filter-form', false);
 
-  forms['map']['handle'] = setMap(forms['map']['className'], loadMapHandler);
+  // forms['map']['handle'] = setMap(forms['map']['className'], loadMapHandler);
 }
 
-export { initForms, getForm };
+export { initForms, getForm, enableForm };

@@ -119,11 +119,15 @@ const createAd = () => {
   };
 };
 
-const SIMILAR_AD_COUNT = 20;
 let similarNearAds = null;
 
-const loadData = () => {
-  similarNearAds = new Array(SIMILAR_AD_COUNT).fill(null).map(() => createAd());
+const loadData = (count, loadDataHandler) => {
+  similarNearAds = new Array(count).fill(null).map(() => createAd());
+
+  if (loadDataHandler) {
+    loadDataHandler();
+  }
+
   return similarNearAds;
 };
 
