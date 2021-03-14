@@ -3,6 +3,32 @@
 import { getAreaCenter } from './data.js';
 import { setAddressInput } from './ad-form.js';
 
+const MAIN_PIN_ICON = {
+  iconPath: '../img/main-pin.svg',
+  iconWidth: 52,
+  iconHeight: 52,
+};
+
+const createPinIcon = (_icon) => {
+  return L.icon({
+    iconUrl: _icon.iconPath,
+    iconSize: [_icon.iconWidth, _icon.iconHeight],
+    iconAnchor: [_icon.iconWidth / 2, _icon.iconHeight],
+  });
+};
+
+const createPinMarker = ({ lat, lng }, isDraggable, icon) => {
+  return L.marker(
+    { lat,
+      lng,
+    },
+    {
+      draggable: isDraggable,
+      icon: createPinIcon(icon),
+    },
+  );
+};
+
 const setMap = (className, loadMapHandler) => {
   const mapElement = document.querySelector(`.${className}`);
 
@@ -21,21 +47,8 @@ const setMap = (className, loadMapHandler) => {
     },
   ).addTo(map);
 
-  const mainPinIcon = L.icon({
-    iconUrl: '../img/main-pin.svg',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
-  });
-
-  const mainPinMarker = L.marker(
-    getAreaCenter(),
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-
-  mainPinMarker.addTo(map);
+  const mainPinMarker = createPinMarker (getAreaCenter(), true, MAIN_PIN_ICON)
+    .addTo(map);
 
   mainPinMarker.on('move', (evt) => {
     const lat = parseFloat(evt.target.getLatLng().lat).toFixed(5);
