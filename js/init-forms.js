@@ -49,11 +49,6 @@ const enableForm = (key, enableFlag) => {
   }
 }
 
-// const loadMapHandler = () => {
-//   enableForm('ad-form', true);
-//   // enableForm('filter-form', true);
-// };
-
 const initForms = () => {
   forms['ad-form']['handle'] = setAdForm(forms['ad-form']['className']);
   enableForm('ad-form', false);

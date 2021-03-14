@@ -12,6 +12,12 @@ const MAIN_PIN_ICON = {
   iconHeight: 52,
 };
 
+const REGULAR_PIN_ICON = {
+  iconPath: '../img/pin.svg',
+  iconWidth: 40,
+  iconHeight: 40,
+};
+
 const createPinIcon = (_icon) => {
   return L.icon({
     iconUrl: _icon.iconPath,
@@ -20,27 +26,27 @@ const createPinIcon = (_icon) => {
   });
 };
 
-const createPinMarker = ({ lat, lng }, isDraggable, icon) => {
+const createPinMarker = ({ lat, lng }, isDraggable, iconData) => {
   return L.marker(
     { lat,
       lng,
     },
     {
       draggable: isDraggable,
-      icon: createPinIcon(icon),
+      icon: createPinIcon(iconData),
     },
   );
 };
 
 const showAdMarkers = (maxCount) => {
-  const data = getData();
-  const count = Math.max(maxCount, data.length);
+  const points = getData();
+  const count = Math.min(maxCount, points.length);
   for (let i = 0; i < count; i++) {
     const latLng = {
-      lat: data[i].location.x,
-      lng: data[i].location.x,
+      lat: points[i].location.x,
+      lng: points[i].location.y,
     };
-    createPinMarker(latLng, false, MAIN_PIN_ICON).addTo(map);
+    createPinMarker(latLng, false, REGULAR_PIN_ICON).addTo(map);
   }
 };
 
@@ -53,7 +59,7 @@ const setMap = (className, loadMapHandler) => {
     map.on('load', loadMapHandler);
   }
 
-  map.setView(getAreaCenter(), 15);
+  map.setView(getAreaCenter(), 13);
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -73,7 +79,7 @@ const setMap = (className, loadMapHandler) => {
 
   setAddressInput(getAreaCenter());
 
-  return mapElement;
+  return map;
 };
 
 export { setMap, showAdMarkers };
