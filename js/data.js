@@ -15,12 +15,12 @@ const PHOTO_COUNT = 3;
 
 const TARGET_AREA = {
   startPoint: {
-    lat: 35.65,
-    lng: 139.7,
+    latitude: 35.65,
+    longitude: 139.7,
   },
   endPoint: {
-    lat: 35.7,
-    lng: 139.8,
+    latitude: 35.7,
+    longitude: 139.8,
   },
 };
 
@@ -60,8 +60,8 @@ const FEATURES = [
 
 const getAreaCenter = () => {
   return {
-    lat: (TARGET_AREA.startPoint.lat + TARGET_AREA.endPoint.lat) / 2,
-    lng: (TARGET_AREA.startPoint.lng + TARGET_AREA.endPoint.lng) / 2,
+    latitude: (TARGET_AREA.startPoint.latitude + TARGET_AREA.endPoint.latitude) / 2,
+    longitude: (TARGET_AREA.startPoint.longitude + TARGET_AREA.endPoint.longitude) / 2,
   };
 };
 
@@ -83,8 +83,8 @@ const createAuthor = () => ({
 });
 
 const createLocation = () => ({
-  x: getRandomFloat(TARGET_AREA.startPoint.lat, TARGET_AREA.endPoint.lat, 5),
-  y: getRandomFloat(TARGET_AREA.startPoint.lng, TARGET_AREA.endPoint.lng, 5),
+  x: getRandomFloat(TARGET_AREA.startPoint.latitude, TARGET_AREA.endPoint.latitude, 5),
+  y: getRandomFloat(TARGET_AREA.startPoint.longitude, TARGET_AREA.endPoint.longitude, 5),
 });
 
 const makeOffer = () => {

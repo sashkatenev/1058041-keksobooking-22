@@ -36,17 +36,9 @@ const fillPopup = (element, data) => {
 
 const createCustomPopup = (point, selector) => {
   const popupTemplate = document.querySelector(selector).content.querySelector('.popup');
-  // const popup = cardTemplate.querySelector('.popup');
-  // const cardsContainer = document.createDocumentFragment();
-
-  // for (let i = 0; i < cardsCount; i++) {
   const newPopup = popupTemplate.cloneNode(true);
-  // const cardData = createAd();
   fillPopup(newPopup, point);
-  //   cardsContainer.appendChild(newPopup);
-  // }
   return newPopup;
-  // document.querySelector('#map-canvas').appendChild(cardsContainer);
 };
 
 export { createCustomPopup };

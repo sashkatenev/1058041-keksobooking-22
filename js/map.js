@@ -26,10 +26,10 @@ const createPinIcon = (_icon) => {
   });
 };
 
-const createPinMarker = ({ lat, lng }, isDraggable, iconData) => {
+const createPinMarker = ({ latitude, longitude }, isDraggable, iconData) => {
   return L.marker(
-    { lat,
-      lng,
+    { lat: latitude,
+      lng: longitude,
     },
     {
       draggable: isDraggable,
@@ -42,11 +42,11 @@ const showAdMarkers = (maxCount) => {
   const points = getData();
   const count = Math.min(maxCount, points.length);
   for (let i = 0; i < count; i++) {
-    const latLng = {
-      lat: points[i].location.x,
-      lng: points[i].location.y,
+    const coordinates = {
+      latitude: points[i].location.x,
+      longitude: points[i].location.y,
     };
-    createPinMarker(latLng, false, REGULAR_PIN_ICON)
+    createPinMarker(coordinates, false, REGULAR_PIN_ICON)
       .addTo(map)
       .bindPopup(
         createCustomPopup(points[i], '#card'),
@@ -66,7 +66,14 @@ const setMap = (className, loadMapHandler) => {
     map.on('load', loadMapHandler);
   }
 
-  map.setView(getAreaCenter(), 13);
+  const center = getAreaCenter();
+  map.setView(
+    {
+      lat: center.latitude,
+      lng: center.longitude,
+    },
+    13,
+  );
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -75,13 +82,13 @@ const setMap = (className, loadMapHandler) => {
     },
   ).addTo(map);
 
-  const mainPinMarker = createPinMarker (getAreaCenter(), true, MAIN_PIN_ICON)
+  const mainPinMarker = createPinMarker(center, true, MAIN_PIN_ICON)
     .addTo(map);
 
   mainPinMarker.on('move', (evt) => {
-    const lat = parseFloat(evt.target.getLatLng().lat).toFixed(5);
-    const lng = parseFloat(evt.target.getLatLng().lng).toFixed(5);
-    setAddressInput({ lat, lng });
+    const latitude = parseFloat(evt.target.getLatLng().lat).toFixed(5);
+    const longitude = parseFloat(evt.target.getLatLng().lng).toFixed(5);
+    setAddressInput({ latitude, longitude });
   });
 
   setAddressInput(getAreaCenter());
