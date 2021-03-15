@@ -1,4 +1,4 @@
-import { createAd, getHousingCaption } from './data.js';
+import { getHousingCaption } from './data.js';
 
 const fillListElement = (owner, template, datum) => {
   owner.innerHTML = '';
@@ -11,7 +11,7 @@ const fillListElement = (owner, template, datum) => {
   }
 }
 
-const fillCard = (element, data) => {
+const fillPopup = (element, data) => {
   element.querySelector('.popup__title').textContent = data.offer.title;
   element.querySelector('.popup__text--address').textContent = data.offer.address;
   element.querySelector('.popup__text--price').innerHTML = `${data.offer.price} <span>₽/ночь</span>`;
@@ -34,19 +34,19 @@ const fillCard = (element, data) => {
   element.querySelector('.popup__avatar').src = data.author.avatar;
 };
 
-const showCards = (cardsCount) => {
-  const cardTemplate = document.querySelector('#card').content;
-  const popup = cardTemplate.querySelector('.popup');
-  const cardsContainer = document.createDocumentFragment();
+const createCustomPopup = (point, selector) => {
+  const popupTemplate = document.querySelector(selector).content.querySelector('.popup');
+  // const popup = cardTemplate.querySelector('.popup');
+  // const cardsContainer = document.createDocumentFragment();
 
-  for (let i = 0; i < cardsCount; i++) {
-    const newPopup = popup.cloneNode(true);
-    const cardData = createAd();
-    fillCard(newPopup, cardData);
-    cardsContainer.appendChild(newPopup);
-  }
-
-  document.querySelector('#map-canvas').appendChild(cardsContainer);
+  // for (let i = 0; i < cardsCount; i++) {
+  const newPopup = popupTemplate.cloneNode(true);
+  // const cardData = createAd();
+  fillPopup(newPopup, point);
+  //   cardsContainer.appendChild(newPopup);
+  // }
+  return newPopup;
+  // document.querySelector('#map-canvas').appendChild(cardsContainer);
 };
 
-export default showCards;
+export { createCustomPopup };
