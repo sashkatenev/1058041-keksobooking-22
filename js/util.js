@@ -17,6 +17,11 @@ const getRandomInt = (...args) => {
   return result;
 }
 
+const round = (value, decimalPlaces) => {
+  const rounder = Math.pow(10, decimalPlaces);
+  return Math.round(value * rounder) / rounder;
+};
+
 const getRandomFloat = (...args) => {
   let [lowerBound = DEFAULT_LOWER_BOUND, upperBound = DEFAULT_UPPER_BOUND] = args;
   const [, , decimalPlaces = DEFAULT_DECIMAL_PLACES] = args;
@@ -28,9 +33,7 @@ const getRandomFloat = (...args) => {
     }
   }
   if (upperBound >= lowerBound && Number.isInteger(decimalPlaces)) {
-    result = Math.random() * (upperBound - lowerBound) + lowerBound;
-    const rounder = Math.pow(10, decimalPlaces);
-    result = Math.round(result * rounder) / rounder;
+    result = round(Math.random() * (upperBound - lowerBound) + lowerBound, decimalPlaces);
   }
   return isNaN(result) ? null : result;
 }
@@ -51,4 +54,4 @@ const zeroPad = (number, numberDigits) => {
   return (Array(numberDigits).fill('0') + number).slice(-numberDigits);
 }
 
-export { getRandomInt, getRandomFloat, getRandomArrayItem, getStringArrayFromTemplate, getRandomSetOfItems, zeroPad };
+export { getRandomInt, getRandomFloat, getRandomArrayItem, getStringArrayFromTemplate, getRandomSetOfItems, zeroPad, round };

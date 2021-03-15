@@ -4,10 +4,6 @@ const AVATAR_FILENAME_TEMPLATE = 'img/avatars/user{xx}.png';
 const MIN_USER_NUMBER = 1;
 const MAX_USER_NUMBER = 8;
 const USER_NUMBER_DIGITS = 2;
-const MIN_LATITUDE = 35.65;
-const MAX_LATITUDE = 35.7;
-const MIN_LONGITUDE = 139.7;
-const MAX_LONGITUDE = 139.8;
 const OFFER_TITLE_TEMPLATE = 'Предложение №';
 const MAX_PRICE = 100000;
 const MAX_ROOMS = 10;
@@ -17,27 +13,35 @@ const PHOTO_TEMPLATE_REPLACE_STRING = '{number}';
 const PHOTO_FILENAME_TEMPLATE = `http://o0.github.io/assets/images/tokyo/hotel${PHOTO_TEMPLATE_REPLACE_STRING}.jpg`;
 const PHOTO_COUNT = 3;
 
-const HOUSING_TYPES = {
-  'palace': {
-    'caption': 'Дворец', minPrice: 10000,
+const TARGET_AREA = {
+  startPoint: {
+    latitude: 35.65,
+    longitude: 139.7,
   },
-  'flat': {
-    'caption': 'Квартира', minPrice: 1000,
-  },
-  'house': {
-    'caption': 'Дом', minPrice: 5000,
-  },
-  'bungalow': {
-    'caption': 'Бунгало', minPrice: 0,
+  endPoint: {
+    latitude: 35.7,
+    longitude: 139.8,
   },
 };
 
-// const MIN_PRICES = {
-//   'palace': 10000,
-//   'flat': 1000,
-//   'house': 5000,
-//   'bungalow': 0,
-// };
+const HOUSING_TYPES = {
+  'palace': {
+    'caption': 'Дворец',
+    'minPrice': 10000,
+  },
+  'flat': {
+    'caption': 'Квартира',
+    'minPrice': 1000,
+  },
+  'house': {
+    'caption': 'Дом',
+    'minPrice': 5000,
+  },
+  'bungalow': {
+    'caption': 'Бунгало',
+    'minPrice': 0,
+  },
+};
 
 const CHECK_POINTS = [
   '12:00',
@@ -53,6 +57,13 @@ const FEATURES = [
   'elevator',
   'conditioner',
 ];
+
+const getAreaCenter = () => {
+  return {
+    latitude: (TARGET_AREA.startPoint.latitude + TARGET_AREA.endPoint.latitude) / 2,
+    longitude: (TARGET_AREA.startPoint.longitude + TARGET_AREA.endPoint.longitude) / 2,
+  };
+};
 
 const getHousingCaption = (value) => {
   return HOUSING_TYPES[value]['caption'];
@@ -72,8 +83,8 @@ const createAuthor = () => ({
 });
 
 const createLocation = () => ({
-  x: getRandomFloat(MIN_LATITUDE, MAX_LATITUDE, 5),
-  y: getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, 5),
+  x: getRandomFloat(TARGET_AREA.startPoint.latitude, TARGET_AREA.endPoint.latitude, 5),
+  y: getRandomFloat(TARGET_AREA.startPoint.longitude, TARGET_AREA.endPoint.longitude, 5),
 });
 
 const makeOffer = () => {
@@ -108,4 +119,20 @@ const createAd = () => {
   };
 };
 
-export { createAd, getHousingCaption, getHousingMinPrice };
+let similarNearAds = null;
+
+const loadData = (count, loadDataHandler) => {
+  similarNearAds = new Array(count).fill(null).map(() => createAd());
+
+  if (loadDataHandler) {
+    loadDataHandler();
+  }
+
+  return similarNearAds;
+};
+
+const getData = () => {
+  return similarNearAds;
+};
+
+export { createAd, getHousingCaption, getHousingMinPrice, getAreaCenter, loadData, getData };

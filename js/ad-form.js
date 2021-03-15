@@ -1,7 +1,10 @@
 import { getHousingMinPrice } from './data.js';
+import { getForm } from './init-forms.js';
 
-const setAdForm = () => {
-  const adForm = document.querySelector('.ad-form');
+let addressElement = null;
+
+const setAdForm = (className) => {
+  const adForm = document.querySelector(`.${className}`);
 
   const priceElement = adForm.querySelector('#price');
   priceElement.max = '1000000';
@@ -29,6 +32,15 @@ const setAdForm = () => {
   };
 
   adForm.addEventListener('change', adFormChangeHandler);
+
+  return adForm;
 };
 
-export default setAdForm;
+const setAddressInput = ({latitude, longitude}) => {
+  if (!addressElement) {
+    addressElement = getForm('ad-form').querySelector('#address');
+  }
+  addressElement.value = `${latitude}, ${longitude}`;
+};
+
+export { setAdForm, setAddressInput };
