@@ -8,6 +8,8 @@ let priceInput = null;
 let housingTypeInput = null;
 let timeInInput = null;
 let timeOutInput = null;
+let roomNumberInput = null;
+let capacityInput = null;
 
 const adFormChangeHandler = (evt) => {
   const control = evt.target;
@@ -21,6 +23,17 @@ const adFormChangeHandler = (evt) => {
       break;
     case timeOutInput:
       timeInInput.value = control.value;
+      break;
+    case roomNumberInput:
+      capacityInput.options.length = 0;
+
+      if (roomNumberInput.value >= 100) {
+        capacityInput.append(new Option('не для гостей', '0'));
+      } else {
+        for (let i = roomNumberInput.selectedIndex + 1; i > 0; i--) {
+          capacityInput.append(new Option(`для ${i} гостей`, i));
+        }
+      }
       break;
   }
 };
@@ -61,14 +74,19 @@ const setAdForm = (className) => {
 
   titleInput = adForm.querySelector('#title');
 
+  housingTypeInput = adForm.querySelector('#type');
+
   priceInput = adForm.querySelector('#price');
   priceInput.min = priceInput.placeholder = getHousingMinPrice(housingTypeInput.value);
   priceInput.max = '1000000';
 
-  housingTypeInput = adForm.querySelector('#type');
-
   timeInInput = adForm.querySelector('#timein');
   timeOutInput = adForm.querySelector('#timeout');
+
+  roomNumberInput = adForm.querySelector('#room_number');
+  roomNumberInput.selectedIndex = -1;
+
+  capacityInput = adForm.querySelector('#capacity');
 
   adForm.addEventListener('change', adFormChangeHandler);
 
@@ -77,6 +95,8 @@ const setAdForm = (className) => {
 
   priceInput.addEventListener('invalid', adFormInvalidHandler);
   priceInput.addEventListener('input', adFormInvalidHandler);
+
+  roomNumberInput.addEventListener('input', adFormInvalidHandler);
 
   return adForm;
 };
