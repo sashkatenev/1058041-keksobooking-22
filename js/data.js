@@ -24,6 +24,11 @@ const TARGET_AREA = {
   },
 };
 
+let mainPoint = {
+  latitude: null,
+  longitude: null,
+};
+
 const HOUSING_TYPES = {
   'palace': {
     'caption': 'Дворец',
@@ -63,6 +68,18 @@ const getAreaCenter = () => {
     latitude: (TARGET_AREA.startPoint.latitude + TARGET_AREA.endPoint.latitude) / 2,
     longitude: (TARGET_AREA.startPoint.longitude + TARGET_AREA.endPoint.longitude) / 2,
   };
+};
+
+const getMainPoint = () => {
+  if (!mainPoint.latitude) {
+    mainPoint = getAreaCenter();
+  }
+  return mainPoint;
+};
+
+const setMainPoint = ({ latitude, longitude }) => {
+  mainPoint.latitude = latitude;
+  mainPoint.longitude = longitude;
 };
 
 const getHousingCaption = (value) => {
@@ -135,4 +152,4 @@ const getData = () => {
   return similarNearAds;
 };
 
-export { createAd, getHousingCaption, getHousingMinPrice, getAreaCenter, loadData, getData };
+export { createAd, getHousingCaption, getHousingMinPrice, getMainPoint, setMainPoint, loadData, getData };
