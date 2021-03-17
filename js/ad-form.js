@@ -1,5 +1,6 @@
 import { getHousingMinPrice } from './data.js';
 import { getForm } from './init-forms.js';
+import { checkCustomValidity, checkAndLoadImage } from './validation.js';
 
 let adForm = null;
 let titleInput = null;
@@ -10,6 +11,8 @@ let timeInInput = null;
 let timeOutInput = null;
 let roomNumberInput = null;
 let capacityInput = null;
+let avatarInput = null;
+let avatarImage = null;
 
 const adFormChangeHandler = (evt) => {
   const control = evt.target;
@@ -18,12 +21,15 @@ const adFormChangeHandler = (evt) => {
     case housingTypeInput:
       priceInput.min = priceInput.placeholder = getHousingMinPrice(control.value);
       break;
+
     case timeInInput:
       timeOutInput.value = control.value;
       break;
+
     case timeOutInput:
       timeInInput.value = control.value;
       break;
+
     case roomNumberInput:
       capacityInput.options.length = 0;
 
@@ -35,38 +41,15 @@ const adFormChangeHandler = (evt) => {
         }
       }
       break;
+
+    case avatarInput:
+      checkAndLoadImage(avatarInput, avatarImage);
+      break;
   }
 };
 
 const adFormInvalidHandler = (evt) => {
-  const control = evt.target;
-
-  switch (true) {
-    case control.validity.valueMissing:
-      control.setCustomValidity('Это поле обязательно для заполнения');
-      break;
-    case control.validity.rangeOverflow:
-      control.setCustomValidity(`Максимальное значение для этого поля: ${control.max}`);
-      break;
-    case control.validity.rangeUnderflow:
-      control.setCustomValidity(`Минимальное значение для этого поля: ${control.min}`);
-      break;
-    case control.validity.tooShort:
-      control.setCustomValidity(`Это поле должно содержать не менее ${control.minLength} символов (ещё хотя бы ${control.minLength - control.value.length})`);
-      break;
-    case control.validity.tooLong:
-      control.setCustomValidity(`Это поле должно содержать не более ${control.maxLength} символов`);
-      break;
-    case control.validity.badInput:
-      control.setCustomValidity(`Это поле должно содержать число`);
-      break;
-    case (control == priceInput) && (!(priceInput.value.match('^[0-9]+$'))):   // e.g. '1e4' rejected by the server
-      control.setCustomValidity('Это поле должно содержать только цифры');
-      break;
-    default:
-      control.setCustomValidity('');
-      break;
-  }
+  checkCustomValidity(evt.target);
 };
 
 const setAdForm = (className) => {
@@ -88,15 +71,25 @@ const setAdForm = (className) => {
 
   capacityInput = adForm.querySelector('#capacity');
 
+  avatarInput = adForm.querySelector('#avatar');
+  avatarImage = adForm.querySelector('.ad-form-header__preview img');
+
   adForm.addEventListener('change', adFormChangeHandler);
 
-  titleInput.addEventListener('invalid', adFormInvalidHandler);
-  titleInput.addEventListener('input', adFormInvalidHandler);
+  [titleInput, priceInput, roomNumberInput].forEach((element) => {
+    ['invalid', 'input'].forEach((event) => {
+      element.addEventListener(event, adFormInvalidHandler);
+    });
+  });
 
-  priceInput.addEventListener('invalid', adFormInvalidHandler);
-  priceInput.addEventListener('input', adFormInvalidHandler);
-
-  roomNumberInput.addEventListener('input', adFormInvalidHandler);
+  adForm.addEventListener('submit', (evt) => {
+    if (adForm.checkValidity()) {
+      evt.preventDefault();
+      alert('Форма валидна');
+    } else {
+      alert('Форма невалидна');
+    }
+  });
 
   return adForm;
 };
