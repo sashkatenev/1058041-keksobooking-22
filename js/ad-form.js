@@ -91,14 +91,14 @@ const setAdForm = (className) => {
 
   adForm.addEventListener('reset', adFormResetHandler);
 
-  adForm.addEventListener('submit', (evt) => {
-    if (adForm.checkValidity()) {
-      evt.preventDefault();
-      alert('Форма валидна');
-    } else {
-      alert('Форма невалидна');
-    }
-  });
+  // adForm.addEventListener('submit', (evt) => {
+  //   if (adForm.checkValidity()) {
+  //     evt.preventDefault();
+  //     alert('Форма валидна');
+  //   } else {
+  //     alert('Форма невалидна');
+  //   }
+  // });
 
   return adForm;
 };
