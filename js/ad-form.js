@@ -1,4 +1,4 @@
-import { getHousingMinPrice } from './data.js';
+import { getHousingMinPrice, getMainPoint } from './data.js';
 import { getForm } from './init-forms.js';
 import { checkCustomValidity, checkAndLoadImage } from './validation.js';
 
@@ -52,6 +52,13 @@ const adFormInvalidHandler = (evt) => {
   checkCustomValidity(evt.target);
 };
 
+const adFormResetHandler = () => {
+  setTimeout(() => {
+    roomNumberInput.selectedIndex = -1;
+    setAddressInput(getMainPoint());
+  }, 0);
+};
+
 const setAdForm = (className) => {
   adForm = document.querySelector(`.${className}`);
 
@@ -81,6 +88,8 @@ const setAdForm = (className) => {
       element.addEventListener(event, adFormInvalidHandler);
     });
   });
+
+  adForm.addEventListener('reset', adFormResetHandler);
 
   adForm.addEventListener('submit', (evt) => {
     if (adForm.checkValidity()) {

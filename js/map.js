@@ -1,6 +1,6 @@
 /* global L:readonly */
 
-import { getData, getAreaCenter } from './data.js';
+import { getData, getMainPoint, setMainPoint } from './data.js';
 import { setAddressInput } from './ad-form.js';
 import { createCustomPopup } from './create-custom-popup.js';
 
@@ -66,11 +66,11 @@ const setMap = (className, loadMapHandler) => {
     map.on('load', loadMapHandler);
   }
 
-  const center = getAreaCenter();
+  const mainPoint = getMainPoint();
   map.setView(
     {
-      lat: center.latitude,
-      lng: center.longitude,
+      lat: mainPoint.latitude,
+      lng: mainPoint.longitude,
     },
     13,
   );
@@ -82,16 +82,20 @@ const setMap = (className, loadMapHandler) => {
     },
   ).addTo(map);
 
-  const mainPinMarker = createPinMarker(center, true, MAIN_PIN_ICON)
+  const mainPinMarker = createPinMarker(mainPoint, true, MAIN_PIN_ICON)
     .addTo(map);
 
   mainPinMarker.on('move', (evt) => {
-    const latitude = parseFloat(evt.target.getLatLng().lat).toFixed(5);
-    const longitude = parseFloat(evt.target.getLatLng().lng).toFixed(5);
-    setAddressInput({ latitude, longitude });
+    setMainPoint(
+      {
+        latitude: parseFloat(evt.target.getLatLng().lat).toFixed(5),
+        longitude: parseFloat(evt.target.getLatLng().lng).toFixed(5),
+      },
+    );
+    setAddressInput(getMainPoint());
   });
 
-  setAddressInput(getAreaCenter());
+  setAddressInput(getMainPoint());
 
   return map;
 };
