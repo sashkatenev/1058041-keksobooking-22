@@ -1,6 +1,7 @@
 import { initForms, enableForm } from './init-forms.js';
 import { setMap, showAdMarkers } from './map.js';
 import { fetchAds } from './data.js';
+import { showPopup } from './util.js';
 
 initForms();
 
@@ -12,6 +13,6 @@ setMap('map__canvas', () => {
       enableForm('filter-form', true);
     },
     (err) => {
-      console.log(err);
+      showPopup('#error', '.error', `Ошибка загрузки данных (${err})`);
     });
 });

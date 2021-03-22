@@ -1,4 +1,5 @@
 const MARKERS_TO_SHOW_MAXCOUNT = 10;
+const DATA_URL = 'https://22.javascript.pages.academy/keksobooking/data';
 
 const TARGET_AREA = {
   startPoint: {
@@ -65,14 +66,13 @@ const getHousingMinPrice = (value) => {
 let similarNearAds = null;
 
 const fetchAds = (succesHandler, errorHandler) => {
-  fetch('https://22.javascript.pages.academy/keksobooking/data')
+  fetch(DATA_URL)
     .then((response) => {
-      if (response) {
+      if (response.ok) {
         similarNearAds = response.json();
         return similarNearAds;
       }
-
-      throw new Error(`${response.status} ${response.statusText}`);
+      throw new Error(`${response.status} - ${response.statusText}`);
     })
     .then((json) => {
       succesHandler(json, MARKERS_TO_SHOW_MAXCOUNT);

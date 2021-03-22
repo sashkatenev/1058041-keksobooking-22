@@ -1,8 +1,8 @@
 /* global L:readonly */
 
-import { getMainPoint, setMainPoint } from './data.js';
+import { getMainPoint, setMainPoint, getHousingCaption } from './data.js';
 import { setAddressInput } from './ad-form.js';
-import { createCustomPopup } from './create-custom-popup.js';
+import { createCustomPopup } from './util.js';
 
 let map = null;
 
@@ -39,17 +39,18 @@ const createPinMarker = ({ latitude, longitude }, isDraggable, iconData) => {
 };
 
 const showAdMarkers = (points, maxCount) => {
-  // const points = getData();
   const count = Math.min(maxCount, points.length);
   for (let i = 0; i < count; i++) {
     const coordinates = {
       latitude: points[i].location.lat,
       longitude: points[i].location.lng,
     };
+    const popup = createCustomPopup('#card', '.popup');
+    fillMapPopup(popup, points[i]);
     createPinMarker(coordinates, false, REGULAR_PIN_ICON)
       .addTo(map)
       .bindPopup(
-        createCustomPopup(points[i], '#card'),
+        popup,
         {
           keepInView: true,
         },
@@ -100,4 +101,38 @@ const setMap = (className, loadMapHandler) => {
   return map;
 };
 
-export { setMap, showAdMarkers };
+const fillMapListElement = (owner, template, datum) => {
+  owner.innerHTML = '';
+  if (datum.length > 0) {
+    datum.forEach((item) => {
+      owner.insertAdjacentHTML('beforeend', template.replace('{}', item));
+    });
+  } else {
+    owner.style.display = 'none';
+  }
+}
+
+const fillMapPopup = (element, data) => {
+  element.querySelector('.popup__title').textContent = data.offer.title;
+  element.querySelector('.popup__text--address').textContent = data.offer.address;
+  element.querySelector('.popup__text--price').innerHTML = `${data.offer.price} <span>₽/ночь</span>`;
+  element.querySelector('.popup__type').textContent = getHousingCaption(data.offer.type);
+  element.querySelector('.popup__text--capacity').textContent = `${data.offer.rooms} комнаты для ${data.offer.guests} гостей`;
+  element.querySelector('.popup__text--time').textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
+
+  fillMapListElement(
+    element.querySelector('.popup__features'),
+    '<li class="popup__feature popup__feature--{}"></li>',
+    data.offer.features);
+
+  element.querySelector('.popup__description').textContent = data.offer.description;
+
+  fillMapListElement(
+    element.querySelector('.popup__photos'),
+    '<img src="{}" class="popup__photo" width="45" height="40" alt="Фотография жилья">',
+    data.offer.photos);
+
+  element.querySelector('.popup__avatar').src = data.author.avatar;
+};
+
+export { setMap, showAdMarkers, fillMapPopup };
