@@ -1,6 +1,6 @@
 /* global L:readonly */
 
-import { getData, getMainPoint, setMainPoint } from './data.js';
+import { getMainPoint, setMainPoint } from './data.js';
 import { setAddressInput } from './ad-form.js';
 import { createCustomPopup } from './create-custom-popup.js';
 
@@ -38,13 +38,13 @@ const createPinMarker = ({ latitude, longitude }, isDraggable, iconData) => {
   );
 };
 
-const showAdMarkers = (maxCount) => {
-  const points = getData();
+const showAdMarkers = (points, maxCount) => {
+  // const points = getData();
   const count = Math.min(maxCount, points.length);
   for (let i = 0; i < count; i++) {
     const coordinates = {
-      latitude: points[i].location.x,
-      longitude: points[i].location.y,
+      latitude: points[i].location.lat,
+      longitude: points[i].location.lng,
     };
     createPinMarker(coordinates, false, REGULAR_PIN_ICON)
       .addTo(map)
@@ -72,7 +72,7 @@ const setMap = (className, loadMapHandler) => {
       lat: mainPoint.latitude,
       lng: mainPoint.longitude,
     },
-    13,
+    10,
   );
 
   L.tileLayer(

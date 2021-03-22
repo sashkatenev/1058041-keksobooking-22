@@ -55,8 +55,6 @@ const initForms = () => {
 
   forms['filter-form']['handle'] = setFilterForm(forms['filter-form']['className']);
   enableForm('filter-form', false);
-
-  // forms['map']['handle'] = setMap(forms['map']['className'], loadMapHandler);
 }
 
 export { initForms, getForm, enableForm };
