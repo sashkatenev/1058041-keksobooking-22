@@ -1,16 +1,15 @@
-const createCustomPopup = (templateSelector, blockSelector) => {
-  const popupTemplate = document.querySelector(templateSelector).content.querySelector(blockSelector);
-  const newPopup = popupTemplate.cloneNode(true);
-  return newPopup;
+const createElementFromTemplate = (templateSelector, blockSelector) => {
+  const elementTemplate = document.querySelector(templateSelector).content.querySelector(blockSelector);
+  const newElement = elementTemplate.cloneNode(true);
+  return newElement;
 };
 
-const showPopup = (templateSelector, blockSelector, popupMessage) => {
-  const popup = createCustomPopup(templateSelector, blockSelector);
-  popup.style.zIndex = 400;
-  if (popupMessage) {
-    popup.querySelector('p').textContent = popupMessage;
-  }
-  document.querySelector('main').append(popup);
+const isEscapeEvent = (evt) => {
+  return (evt.keyCode === 27);
 };
 
-export { createCustomPopup, showPopup };
+const isEnterEvent = (evt) => {
+  return (evt.keyCode === 13) || (evt.keyCode === 32);
+};
+
+export { createElementFromTemplate, isEscapeEvent, isEnterEvent }

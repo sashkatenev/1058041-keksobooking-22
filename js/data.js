@@ -1,5 +1,5 @@
 const MARKERS_TO_SHOW_MAXCOUNT = 10;
-const DATA_URL = 'https://22.javascript.pages.academy/keksobooking/data';
+const DATA_URL = 'https://22.javascript.pages.academy/keksobooking/data1';
 
 const TARGET_AREA = {
   startPoint: {

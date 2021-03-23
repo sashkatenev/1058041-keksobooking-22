@@ -1,7 +1,7 @@
 import { initForms, enableForm } from './init-forms.js';
 import { setMap, showAdMarkers } from './map.js';
 import { fetchAds } from './data.js';
-import { showPopup } from './util.js';
+import { showPopup } from './custom-popup.js';
 
 initForms();
 

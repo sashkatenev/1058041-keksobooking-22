@@ -2,7 +2,7 @@
 
 import { getMainPoint, setMainPoint, getHousingCaption } from './data.js';
 import { setAddressInput } from './ad-form.js';
-import { createCustomPopup } from './util.js';
+import { createElementFromTemplate } from './util.js';
 
 let map = null;
 
@@ -45,7 +45,7 @@ const showAdMarkers = (points, maxCount) => {
       latitude: points[i].location.lat,
       longitude: points[i].location.lng,
     };
-    const popup = createCustomPopup('#card', '.popup');
+    const popup = createElementFromTemplate('#card', '.popup');
     fillMapPopup(popup, points[i]);
     createPinMarker(coordinates, false, REGULAR_PIN_ICON)
       .addTo(map)
@@ -135,4 +135,4 @@ const fillMapPopup = (element, data) => {
   element.querySelector('.popup__avatar').src = data.author.avatar;
 };
 
-export { setMap, showAdMarkers, fillMapPopup };
+export { setMap, showAdMarkers };
