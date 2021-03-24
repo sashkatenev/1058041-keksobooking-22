@@ -8,8 +8,8 @@ const isEscapeEvent = (evt) => {
   return (evt.keyCode === 27);
 };
 
-const isEnterEvent = (evt) => {
-  return (evt.keyCode === 13) || (evt.keyCode === 32);
-};
+// const isEnterEvent = (evt) => {
+//   return (evt.keyCode === 13) || (evt.keyCode === 32);
+// };
 
-export { createElementFromTemplate, isEscapeEvent, isEnterEvent }
+export { createElementFromTemplate, isEscapeEvent }

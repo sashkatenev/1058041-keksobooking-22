@@ -1,5 +1,5 @@
-const MARKERS_TO_SHOW_MAXCOUNT = 10;
-const DATA_URL = 'https://22.javascript.pages.academy/keksobooking/data1';
+const GET_DATA_URL = 'https://22.javascript.pages.academy/keksobooking/data';
+const POST_DATA_URL = 'https://22.javascript.pages.academy/keksobooking';
 
 const TARGET_AREA = {
   startPoint: {
@@ -65,8 +65,8 @@ const getHousingMinPrice = (value) => {
 
 let similarNearAds = null;
 
-const fetchAds = (succesHandler, errorHandler) => {
-  fetch(DATA_URL)
+const fetchData = (succesHandler, errorHandler) => {
+  fetch(GET_DATA_URL)
     .then((response) => {
       if (response.ok) {
         similarNearAds = response.json();
@@ -75,7 +75,28 @@ const fetchAds = (succesHandler, errorHandler) => {
       throw new Error(`${response.status} - ${response.statusText}`);
     })
     .then((json) => {
-      succesHandler(json, MARKERS_TO_SHOW_MAXCOUNT);
+      succesHandler(json);
+    })
+    .catch((err) => {
+      errorHandler(err);
+    })
+};
+
+const postData = (succesHandler, errorHandler, body) => {
+  fetch(
+    POST_DATA_URL,
+    {
+      method: 'POST',
+      body,
+    },
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`${response.status} - ${response.statusText}`);
+      }
+    })
+    .then(() => {
+      succesHandler();
     })
     .catch((err) => {
       errorHandler(err);
@@ -86,4 +107,4 @@ const getData = () => {
   return similarNearAds;
 };
 
-export { getHousingCaption, getHousingMinPrice, getMainPoint, setMainPoint, fetchAds, getData };
+export { getHousingCaption, getHousingMinPrice, getMainPoint, setMainPoint, fetchData, postData, getData };

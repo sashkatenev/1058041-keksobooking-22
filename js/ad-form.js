@@ -1,6 +1,7 @@
-import { getHousingMinPrice, getMainPoint } from './data.js';
+import { getHousingMinPrice, getMainPoint, postData } from './data.js';
 import { getForm } from './init-forms.js';
 import { checkCustomValidity, checkAndLoadImage } from './validation.js';
+import { showPopup } from './custom-popup.js';
 
 let adForm = null;
 let titleInput = null;
@@ -91,14 +92,21 @@ const setAdForm = (className) => {
 
   adForm.addEventListener('reset', adFormResetHandler);
 
-  // adForm.addEventListener('submit', (evt) => {
-  //   if (adForm.checkValidity()) {
-  //     evt.preventDefault();
-  //     alert('Форма валидна');
-  //   } else {
-  //     alert('Форма невалидна');
-  //   }
-  // });
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    adForm.querySelector('.ad-form__submit').blur();
+
+    postData(
+      () => {
+        showPopup('#success', '.success');
+        adForm.reset();
+      },
+      (err) => {
+        showPopup('#error', '.error', `Ошибка загрузки данных (${err})`);
+      },
+      new FormData(evt.target),
+    );
+  });
 
   return adForm;
 };
