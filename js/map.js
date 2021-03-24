@@ -1,21 +1,52 @@
 /* global L:readonly */
 
-import { getMainPoint, setMainPoint, getHousingCaption } from './data.js';
+import { getHousingCaption } from './data.js';
 import { setAddressInput } from './ad-form.js';
 import { createElementFromTemplate } from './util.js';
 
-let map = null;
+const TARGET_AREA = {
+  startPoint: {
+    latitude: 35.65,
+    longitude: 139.7,
+  },
+  endPoint: {
+    latitude: 35.7,
+    longitude: 139.8,
+  },
+};
 
-const MAIN_PIN_ICON = {
+const MAIN_PIN_ICON_DATA = {
   iconPath: '../img/main-pin.svg',
   iconWidth: 52,
   iconHeight: 52,
 };
 
-const REGULAR_PIN_ICON = {
+const REGULAR_PIN_ICON_DATA = {
   iconPath: '../img/pin.svg',
   iconWidth: 40,
   iconHeight: 40,
+};
+
+let map = null;
+let mainPinMarker = null;
+
+const getAreaCenter = () => {
+  return {
+    latitude: (TARGET_AREA.startPoint.latitude + TARGET_AREA.endPoint.latitude) / 2,
+    longitude: (TARGET_AREA.startPoint.longitude + TARGET_AREA.endPoint.longitude) / 2,
+  };
+};
+
+const getMainPoint = () => {
+  // const [latitude, longitude] = [mainPinMarker.getLatLng().lat.toFixed(5), mainPinMarker.getLatLng().lng.toFixed(5)];
+  return {
+    latitude: mainPinMarker.getLatLng().lat.toFixed(5),
+    longitude: mainPinMarker.getLatLng().lng.toFixed(5),
+  };
+};
+
+const resetMainPoint = () => {
+  moveMarker(mainPinMarker, getAreaCenter());
 };
 
 const createPinIcon = (_icon) => {
@@ -47,7 +78,7 @@ const showAdMarkers = (points, maxCount) => {
     };
     const popup = createElementFromTemplate('#card', '.popup');
     fillMapPopup(popup, points[i]);
-    createPinMarker(coordinates, false, REGULAR_PIN_ICON)
+    createPinMarker(coordinates, false, REGULAR_PIN_ICON_DATA)
       .addTo(map)
       .bindPopup(
         popup,
@@ -56,6 +87,13 @@ const showAdMarkers = (points, maxCount) => {
         },
       );
   }
+};
+
+const moveMarker = (marker, point) => {
+  marker.setLatLng({
+    lat: point.latitude,
+    lng: point.longitude,
+  });
 };
 
 const setMap = (className, loadMapHandler) => {
@@ -67,11 +105,11 @@ const setMap = (className, loadMapHandler) => {
     map.on('load', loadMapHandler);
   }
 
-  const mainPoint = getMainPoint();
+  const point = getAreaCenter();
   map.setView(
     {
-      lat: mainPoint.latitude,
-      lng: mainPoint.longitude,
+      lat: point.latitude,
+      lng: point.longitude,
     },
     10,
   );
@@ -83,22 +121,14 @@ const setMap = (className, loadMapHandler) => {
     },
   ).addTo(map);
 
-  const mainPinMarker = createPinMarker(mainPoint, true, MAIN_PIN_ICON)
+  mainPinMarker = createPinMarker(point, true, MAIN_PIN_ICON_DATA)
     .addTo(map);
 
-  mainPinMarker.on('move', (evt) => {
-    setMainPoint(
-      {
-        latitude: parseFloat(evt.target.getLatLng().lat).toFixed(5),
-        longitude: parseFloat(evt.target.getLatLng().lng).toFixed(5),
-      },
-    );
+  mainPinMarker.on('move', () => {
     setAddressInput(getMainPoint());
   });
 
-  setAddressInput(getMainPoint());
-
-  return map;
+  resetMainPoint();
 };
 
 const fillMapListElement = (owner, template, datum) => {
@@ -135,4 +165,4 @@ const fillMapPopup = (element, data) => {
   element.querySelector('.popup__avatar').src = data.author.avatar;
 };
 
-export { setMap, showAdMarkers };
+export { setMap, showAdMarkers, resetMainPoint };

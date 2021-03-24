@@ -1,4 +1,5 @@
-import { getHousingMinPrice, getMainPoint, postData } from './data.js';
+import { getHousingMinPrice, postData } from './data.js';
+import { resetMainPoint } from './map.js';
 import { getForm } from './init-forms.js';
 import { checkCustomValidity, checkAndLoadImage } from './validation.js';
 import { showPopup } from './custom-popup.js';
@@ -56,7 +57,7 @@ const adFormInvalidHandler = (evt) => {
 const adFormResetHandler = () => {
   setTimeout(() => {
     roomNumberInput.selectedIndex = -1;
-    setAddressInput(getMainPoint());
+    resetMainPoint();
   }, 0);
 };
 
