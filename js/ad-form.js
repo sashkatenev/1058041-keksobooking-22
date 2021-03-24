@@ -1,20 +1,21 @@
 import { getHousingMinPrice, postData } from './data.js';
 import { resetMainPoint } from './map.js';
-// import { getForm } from './init-forms.js';
 import { checkCustomValidity, checkAndLoadImage } from './validation.js';
 import { showPopup } from './custom-popup.js';
 
-let adForm = null;
-let titleInput = null;
-let addressInput = null;
-let priceInput = null;
-let housingTypeInput = null;
-let timeInInput = null;
-let timeOutInput = null;
-let roomNumberInput = null;
-let capacityInput = null;
-let avatarInput = null;
-let avatarImage = null;
+const FORM_CLASS_NAME = 'ad-form';
+
+const adForm = document.querySelector(`.${FORM_CLASS_NAME}`);
+const titleInput = adForm.querySelector('#title');
+const addressInput = adForm.querySelector('#address');
+const priceInput = adForm.querySelector('#price');
+const housingTypeInput = adForm.querySelector('#type');
+const timeInInput = adForm.querySelector('#timein');
+const timeOutInput = adForm.querySelector('#timeout');
+const roomNumberInput = adForm.querySelector('#room_number');
+const capacityInput = adForm.querySelector('#capacity');
+const avatarInput = adForm.querySelector('#avatar');
+const avatarImage = adForm.querySelector('.ad-form-header__preview img');
 
 const adFormChangeHandler = (evt) => {
   const control = evt.target;
@@ -61,27 +62,10 @@ const adFormResetHandler = () => {
   }, 0);
 };
 
-const setAdForm = (className) => {
-  adForm = document.querySelector(`.${className}`);
-
-  titleInput = adForm.querySelector('#title');
-
-  housingTypeInput = adForm.querySelector('#type');
-
-  priceInput = adForm.querySelector('#price');
+const setAdForm = () => {
   priceInput.min = priceInput.placeholder = getHousingMinPrice(housingTypeInput.value);
   priceInput.max = '1000000';
-
-  timeInInput = adForm.querySelector('#timein');
-  timeOutInput = adForm.querySelector('#timeout');
-
-  roomNumberInput = adForm.querySelector('#room_number');
   roomNumberInput.selectedIndex = -1;
-
-  capacityInput = adForm.querySelector('#capacity');
-
-  avatarInput = adForm.querySelector('#avatar');
-  avatarImage = adForm.querySelector('.ad-form-header__preview img');
 
   adForm.addEventListener('change', adFormChangeHandler);
 
@@ -108,15 +92,9 @@ const setAdForm = (className) => {
       new FormData(evt.target),
     );
   });
-
-  return adForm;
 };
 
 const setAddressInput = (point) => {
-  if (!addressInput) {
-    // addressInput = getForm('ad-form').querySelector('#address');
-    addressInput = document.querySelector('.ad-form').querySelector('#address');
-  }
   addressInput.value = `${point.lat}, ${point.lng}`;
 };
 
