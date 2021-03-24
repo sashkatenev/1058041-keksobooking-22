@@ -86,33 +86,30 @@ const moveMarker = (marker, point) => {
   marker.setLatLng(point);
 };
 
-const setMap = (className, loadMapHandler) => {
-  const mapElement = document.querySelector(`.${className}`);
+const loadMap = (className) => {
+  return new Promise((resolve) => {
+    const mapElement = document.querySelector(`.${className}`);
+    map = L.map(mapElement);
+    map.on('load', resolve);
 
-  map = L.map(mapElement);
+    const point = getAreaCenter();
+    map.setView(point, 10);
 
-  if (loadMapHandler) {
-    map.on('load', loadMapHandler);
-  }
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      },
+    ).addTo(map);
 
-  const point = getAreaCenter();
-  map.setView(point, 10);
+    mainPinMarker = createPinMarker(point, true, MAIN_PIN_ICON_DATA).addTo(map);
 
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ).addTo(map);
+    mainPinMarker.on('move', () => {
+      setAddressInput(getMainPoint());
+    });
 
-  mainPinMarker = createPinMarker(point, true, MAIN_PIN_ICON_DATA)
-    .addTo(map);
-
-  mainPinMarker.on('move', () => {
-    setAddressInput(getMainPoint());
+    resetMainPoint();
   });
-
-  resetMainPoint();
 };
 
 const fillMapListElement = (owner, template, datum) => {
@@ -149,4 +146,4 @@ const fillMapPopup = (element, data) => {
   element.querySelector('.popup__avatar').src = data.author.avatar;
 };
 
-export { setMap, showAdMarkers, resetMainPoint };
+export { loadMap, showAdMarkers, resetMainPoint };
