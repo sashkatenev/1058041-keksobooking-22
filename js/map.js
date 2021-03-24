@@ -32,16 +32,15 @@ let mainPinMarker = null;
 
 const getAreaCenter = () => {
   return {
-    latitude: (TARGET_AREA.startPoint.latitude + TARGET_AREA.endPoint.latitude) / 2,
-    longitude: (TARGET_AREA.startPoint.longitude + TARGET_AREA.endPoint.longitude) / 2,
+    lat: (TARGET_AREA.startPoint.latitude + TARGET_AREA.endPoint.latitude) / 2,
+    lng: (TARGET_AREA.startPoint.longitude + TARGET_AREA.endPoint.longitude) / 2,
   };
 };
 
 const getMainPoint = () => {
-  // const [latitude, longitude] = [mainPinMarker.getLatLng().lat.toFixed(5), mainPinMarker.getLatLng().lng.toFixed(5)];
   return {
-    latitude: mainPinMarker.getLatLng().lat.toFixed(5),
-    longitude: mainPinMarker.getLatLng().lng.toFixed(5),
+    lat: mainPinMarker.getLatLng().lat.toFixed(5),
+    lng: mainPinMarker.getLatLng().lng.toFixed(5),
   };
 };
 
@@ -57,11 +56,9 @@ const createPinIcon = (_icon) => {
   });
 };
 
-const createPinMarker = ({ latitude, longitude }, isDraggable, iconData) => {
+const createPinMarker = (point, isDraggable, iconData) => {
   return L.marker(
-    { lat: latitude,
-      lng: longitude,
-    },
+    point,
     {
       draggable: isDraggable,
       icon: createPinIcon(iconData),
@@ -69,16 +66,12 @@ const createPinMarker = ({ latitude, longitude }, isDraggable, iconData) => {
   );
 };
 
-const showAdMarkers = (points, maxCount) => {
-  const count = Math.min(maxCount, points.length);
+const showAdMarkers = (ads, maxCount) => {
+  const count = Math.min(maxCount, ads.length);
   for (let i = 0; i < count; i++) {
-    const coordinates = {
-      latitude: points[i].location.lat,
-      longitude: points[i].location.lng,
-    };
     const popup = createElementFromTemplate('#card', '.popup');
-    fillMapPopup(popup, points[i]);
-    createPinMarker(coordinates, false, REGULAR_PIN_ICON_DATA)
+    fillMapPopup(popup, ads[i]);
+    createPinMarker(ads[i].location, false, REGULAR_PIN_ICON_DATA)
       .addTo(map)
       .bindPopup(
         popup,
@@ -90,10 +83,7 @@ const showAdMarkers = (points, maxCount) => {
 };
 
 const moveMarker = (marker, point) => {
-  marker.setLatLng({
-    lat: point.latitude,
-    lng: point.longitude,
-  });
+  marker.setLatLng(point);
 };
 
 const setMap = (className, loadMapHandler) => {
@@ -106,13 +96,7 @@ const setMap = (className, loadMapHandler) => {
   }
 
   const point = getAreaCenter();
-  map.setView(
-    {
-      lat: point.latitude,
-      lng: point.longitude,
-    },
-    10,
-  );
+  map.setView(point, 10);
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

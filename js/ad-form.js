@@ -112,11 +112,11 @@ const setAdForm = (className) => {
   return adForm;
 };
 
-const setAddressInput = ({latitude, longitude}) => {
+const setAddressInput = (point) => {
   if (!addressInput) {
     addressInput = getForm('ad-form').querySelector('#address');
   }
-  addressInput.value = `${latitude}, ${longitude}`;
+  addressInput.value = `${point.lat}, ${point.lng}`;
 };
 
 export { setAdForm, setAddressInput };
