@@ -1,6 +1,6 @@
 import { getHousingMinPrice, postData } from './data.js';
 import { resetMainPoint } from './map.js';
-import { getForm } from './init-forms.js';
+// import { getForm } from './init-forms.js';
 import { checkCustomValidity, checkAndLoadImage } from './validation.js';
 import { showPopup } from './custom-popup.js';
 
@@ -114,7 +114,8 @@ const setAdForm = (className) => {
 
 const setAddressInput = (point) => {
   if (!addressInput) {
-    addressInput = getForm('ad-form').querySelector('#address');
+    // addressInput = getForm('ad-form').querySelector('#address');
+    addressInput = document.querySelector('.ad-form').querySelector('#address');
   }
   addressInput.value = `${point.lat}, ${point.lng}`;
 };

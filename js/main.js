@@ -9,7 +9,7 @@ initForms();
 
 const fetchDataSuccessHandler = (ads) => {
   showAdMarkers(ads, MARKERS_TO_SHOW_MAXCOUNT);
-  enableForm('filter-form', true);
+  enableForm('map__filters', true);
 };
 
 const fetchDataErrorHandler = (err) => {

@@ -1,24 +1,24 @@
 import { setAdForm } from './ad-form.js';
 import setFilterForm from './filter-form.js';
 
-const forms = {
-  'ad-form': {
-    'className': 'ad-form',
-    'handle': null,
-  },
-  'filter-form': {
-    'className': 'map__filters',
-    'handle': null,
-  },
-  // 'map': {
-  //   'className': 'map__canvas',
-  //   'handle': null,
-  // },
-}
+// const forms = {
+//   'ad-form': {
+//     'className': 'ad-form',
+//     'handle': null,
+//   },
+//   'filter-form': {
+//     'className': 'map__filters',
+//     'handle': null,
+//   },
+//   'map': {
+//     'className': 'map__canvas',
+//     'handle': null,
+//   },
+// }
 
-const getForm = (name) => {
-  return forms[name]['handle'];
-};
+// const getForm = (name) => {
+//   return forms[name]['handle'];
+// };
 
 const enableCollection = (collection) => {
   collection.forEach((element) => {
@@ -32,9 +32,12 @@ const disableCollection = (collection) => {
   });
 };
 
-const enableForm = (key, enableFlag) => {
-  const formElement = getForm(key);
-  const disabledFormClass = `${forms[key]['className']}--disabled`;
+// const enableForm = (key, enableFlag) => {
+const enableForm = (className, enableFlag) => {
+  // const formElement = getForm(key);
+  const formElement = document.querySelector(`.${className}`);
+  // const disabledFormClass = `${forms[key]['className']}--disabled`;
+  const disabledFormClass = `${className}--disabled`;
   const selectors = ['fieldset', 'input', 'select'];
   if (enableFlag) {
     formElement.classList.remove(disabledFormClass);
@@ -50,11 +53,14 @@ const enableForm = (key, enableFlag) => {
 }
 
 const initForms = () => {
-  forms['ad-form']['handle'] = setAdForm(forms['ad-form']['className']);
+  // forms['ad-form']['handle'] = setAdForm(forms['ad-form']['className']);
+  setAdForm('ad-form');
   enableForm('ad-form', false);
 
-  forms['filter-form']['handle'] = setFilterForm(forms['filter-form']['className']);
-  enableForm('filter-form', false);
+  // forms['filter-form']['handle'] = setFilterForm(forms['filter-form']['className']);
+  setFilterForm('map__filters');
+  enableForm('map__filters', false);
 }
 
-export { initForms, getForm, enableForm };
+// export { initForms, getForm, enableForm };
+export { initForms, enableForm };
