@@ -1,21 +1,51 @@
 /* global L:readonly */
 
-import { getData, getMainPoint, setMainPoint } from './data.js';
+import { getHousingCaption } from './data.js';
 import { setAddressInput } from './ad-form.js';
-import { createCustomPopup } from './create-custom-popup.js';
+import { createElementFromTemplate } from './util.js';
 
-let map = null;
+const TARGET_AREA = {
+  startPoint: {
+    latitude: 35.65,
+    longitude: 139.7,
+  },
+  endPoint: {
+    latitude: 35.7,
+    longitude: 139.8,
+  },
+};
 
-const MAIN_PIN_ICON = {
+const MAIN_PIN_ICON_DATA = {
   iconPath: '../img/main-pin.svg',
   iconWidth: 52,
   iconHeight: 52,
 };
 
-const REGULAR_PIN_ICON = {
+const REGULAR_PIN_ICON_DATA = {
   iconPath: '../img/pin.svg',
   iconWidth: 40,
   iconHeight: 40,
+};
+
+let map = null;
+let mainPinMarker = null;
+
+const getAreaCenter = () => {
+  return {
+    lat: (TARGET_AREA.startPoint.latitude + TARGET_AREA.endPoint.latitude) / 2,
+    lng: (TARGET_AREA.startPoint.longitude + TARGET_AREA.endPoint.longitude) / 2,
+  };
+};
+
+const getMainPoint = () => {
+  return {
+    lat: mainPinMarker.getLatLng().lat.toFixed(5),
+    lng: mainPinMarker.getLatLng().lng.toFixed(5),
+  };
+};
+
+const resetMainPoint = () => {
+  moveMarker(mainPinMarker, getAreaCenter());
 };
 
 const createPinIcon = (_icon) => {
@@ -26,11 +56,9 @@ const createPinIcon = (_icon) => {
   });
 };
 
-const createPinMarker = ({ latitude, longitude }, isDraggable, iconData) => {
+const createPinMarker = (point, isDraggable, iconData) => {
   return L.marker(
-    { lat: latitude,
-      lng: longitude,
-    },
+    point,
     {
       draggable: isDraggable,
       icon: createPinIcon(iconData),
@@ -38,18 +66,15 @@ const createPinMarker = ({ latitude, longitude }, isDraggable, iconData) => {
   );
 };
 
-const showAdMarkers = (maxCount) => {
-  const points = getData();
-  const count = Math.min(maxCount, points.length);
+const showAdMarkers = (ads, maxCount) => {
+  const count = Math.min(maxCount, ads.length);
   for (let i = 0; i < count; i++) {
-    const coordinates = {
-      latitude: points[i].location.x,
-      longitude: points[i].location.y,
-    };
-    createPinMarker(coordinates, false, REGULAR_PIN_ICON)
+    const popup = createElementFromTemplate('#card', '.popup');
+    fillMapPopup(popup, ads[i]);
+    createPinMarker(ads[i].location, false, REGULAR_PIN_ICON_DATA)
       .addTo(map)
       .bindPopup(
-        createCustomPopup(points[i], '#card'),
+        popup,
         {
           keepInView: true,
         },
@@ -57,47 +82,68 @@ const showAdMarkers = (maxCount) => {
   }
 };
 
-const setMap = (className, loadMapHandler) => {
-  const mapElement = document.querySelector(`.${className}`);
-
-  map = L.map(mapElement);
-
-  if (loadMapHandler) {
-    map.on('load', loadMapHandler);
-  }
-
-  const mainPoint = getMainPoint();
-  map.setView(
-    {
-      lat: mainPoint.latitude,
-      lng: mainPoint.longitude,
-    },
-    13,
-  );
-
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ).addTo(map);
-
-  const mainPinMarker = createPinMarker(mainPoint, true, MAIN_PIN_ICON)
-    .addTo(map);
-
-  mainPinMarker.on('move', (evt) => {
-    setMainPoint(
-      {
-        latitude: parseFloat(evt.target.getLatLng().lat).toFixed(5),
-        longitude: parseFloat(evt.target.getLatLng().lng).toFixed(5),
-      },
-    );
-    setAddressInput(getMainPoint());
-  });
-
-  setAddressInput(getMainPoint());
-
-  return map;
+const moveMarker = (marker, point) => {
+  marker.setLatLng(point);
 };
 
-export { setMap, showAdMarkers };
+const loadMap = (className) => {
+  return new Promise((resolve) => {
+    const mapElement = document.querySelector(`.${className}`);
+    map = L.map(mapElement);
+    map.on('load', resolve);
+
+    const point = getAreaCenter();
+    map.setView(point, 10);
+
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      },
+    ).addTo(map);
+
+    mainPinMarker = createPinMarker(point, true, MAIN_PIN_ICON_DATA).addTo(map);
+
+    mainPinMarker.on('move', () => {
+      setAddressInput(getMainPoint());
+    });
+
+    resetMainPoint();
+  });
+};
+
+const fillMapListElement = (owner, template, datum) => {
+  owner.innerHTML = '';
+  if (datum.length > 0) {
+    datum.forEach((item) => {
+      owner.insertAdjacentHTML('beforeend', template.replace('{}', item));
+    });
+  } else {
+    owner.style.display = 'none';
+  }
+}
+
+const fillMapPopup = (element, data) => {
+  element.querySelector('.popup__title').textContent = data.offer.title;
+  element.querySelector('.popup__text--address').textContent = data.offer.address;
+  element.querySelector('.popup__text--price').innerHTML = `${data.offer.price} <span>₽/ночь</span>`;
+  element.querySelector('.popup__type').textContent = getHousingCaption(data.offer.type);
+  element.querySelector('.popup__text--capacity').textContent = `${data.offer.rooms} комнаты для ${data.offer.guests} гостей`;
+  element.querySelector('.popup__text--time').textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
+
+  fillMapListElement(
+    element.querySelector('.popup__features'),
+    '<li class="popup__feature popup__feature--{}"></li>',
+    data.offer.features);
+
+  element.querySelector('.popup__description').textContent = data.offer.description;
+
+  fillMapListElement(
+    element.querySelector('.popup__photos'),
+    '<img src="{}" class="popup__photo" width="45" height="40" alt="Фотография жилья">',
+    data.offer.photos);
+
+  element.querySelector('.popup__avatar').src = data.author.avatar;
+};
+
+export { loadMap, showAdMarkers, resetMainPoint };

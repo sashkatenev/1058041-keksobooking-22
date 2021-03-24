@@ -1,16 +1,26 @@
 import { initForms, enableForm } from './init-forms.js';
-import { setMap, showAdMarkers } from './map.js';
-import { loadData } from './data.js';
+import { loadMap, showAdMarkers } from './map.js';
+import { fetchData } from './data.js';
+import { showPopup } from './custom-popup.js';
 
-const SIMILAR_AD_COUNT = 20;
-const COUNT_MARKERS_TO_SHOW = 10;
+const MARKERS_TO_SHOW_MAXCOUNT = 10;
 
 initForms();
 
-setMap('map__canvas', () => {
-  enableForm('ad-form', true);
-  loadData(SIMILAR_AD_COUNT, () => {
-    showAdMarkers(COUNT_MARKERS_TO_SHOW);
-    enableForm('filter-form', true);
+const fetchDataSuccessHandler = (ads) => {
+  showAdMarkers(ads, MARKERS_TO_SHOW_MAXCOUNT);
+  enableForm('map__filters', true);
+};
+
+const fetchDataErrorHandler = (err) => {
+  showPopup('#error', '.error', `Ошибка загрузки данных (${err})`);
+};
+
+loadMap('map__canvas')
+  .then(() => {
+    enableForm('ad-form', true);
+    fetchData(fetchDataSuccessHandler, fetchDataErrorHandler);
   })
-});
+  .catch((err) => {
+    showPopup('#error', '.error', `Ошибка загрузки карты (${err})`);
+  });
