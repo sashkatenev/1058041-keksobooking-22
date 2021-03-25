@@ -1,5 +1,4 @@
 import { setAdForm } from './ad-form.js';
-import setFilterForm from './filter-form.js';
 
 const enableCollection = (collection) => {
   collection.forEach((element) => {
@@ -34,7 +33,7 @@ const initForms = () => {
   setAdForm();
   enableForm('ad-form', false);
 
-  setFilterForm();
+  // setFilterForm();
   enableForm('map__filters', false);
 }
 

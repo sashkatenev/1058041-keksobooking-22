@@ -112,6 +112,15 @@ const loadMap = (className) => {
   });
 };
 
+const setMapMarkerMoveEndHandler = (cb, maxCount) => {
+  mainPinMarker.on('moveend', () => {
+    showAdMarkers(
+      (data) => cb(data.slice()),
+      maxCount,
+    );
+  });
+};
+
 const fillMapListElement = (owner, template, datum) => {
   owner.innerHTML = '';
   if (datum.length > 0) {
@@ -146,4 +155,4 @@ const fillMapPopup = (element, data) => {
   element.querySelector('.popup__avatar').src = data.author.avatar;
 };
 
-export { loadMap, showAdMarkers, resetMainPoint };
+export { loadMap, showAdMarkers, resetMainPoint, setMapMarkerMoveEndHandler };
