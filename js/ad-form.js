@@ -2,6 +2,7 @@ import { getHousingMinPrice, postData } from './data.js';
 import { resetMainPoint } from './map.js';
 import { checkCustomValidity, checkAndLoadImage } from './validation.js';
 import { showPopup } from './custom-popup.js';
+import { enableForm } from './util.js';
 
 const FORM_CLASS_NAME = 'ad-form';
 
@@ -92,10 +93,14 @@ const setAdForm = () => {
       new FormData(evt.target),
     );
   });
+
+  enableForm('ad-form', false);
 };
 
 const setAddressInput = (point) => {
   addressInput.value = `${point.lat}, ${point.lng}`;
 };
+
+setAdForm();
 
 export { setAdForm, setAddressInput };
