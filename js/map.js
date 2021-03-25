@@ -29,6 +29,7 @@ const REGULAR_PIN_ICON_DATA = {
 
 let map = null;
 let mainPinMarker = null;
+let regularPinMarkers = [];
 
 const getAreaCenter = () => {
   return {
@@ -67,23 +68,28 @@ const createPinMarker = (point, isDraggable, iconData) => {
 };
 
 const showAdMarkers = (ads, maxCount) => {
+  removeRegularMarkers();
   const count = Math.min(maxCount, ads.length);
   for (let i = 0; i < count; i++) {
     const popup = createElementFromTemplate('#card', '.popup');
     fillMapPopup(popup, ads[i]);
-    createPinMarker(ads[i].location, false, REGULAR_PIN_ICON_DATA)
-      .addTo(map)
-      .bindPopup(
-        popup,
-        {
-          keepInView: true,
-        },
-      );
+    regularPinMarkers.push(
+      createPinMarker(ads[i].location, false, REGULAR_PIN_ICON_DATA)
+        .addTo(map)
+        .bindPopup(popup, { keepInView: true }),
+    );
   }
 };
 
 const moveMarker = (marker, point) => {
   marker.setLatLng(point);
+};
+
+const removeRegularMarkers = () => {
+  regularPinMarkers.forEach((marker) => {
+    marker.remove();
+  })
+  regularPinMarkers.splice(0, regularPinMarkers.length);
 };
 
 const loadMap = (className) => {
@@ -114,10 +120,7 @@ const loadMap = (className) => {
 
 const setMapMarkerMoveEndHandler = (cb, maxCount) => {
   mainPinMarker.on('moveend', () => {
-    showAdMarkers(
-      (data) => cb(data.slice()),
-      maxCount,
-    );
+    showAdMarkers(cb(), maxCount);
   });
 };
 

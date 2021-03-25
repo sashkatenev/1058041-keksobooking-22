@@ -13,7 +13,7 @@ const fetchDataSuccessHandler = (ads) => {
   enableForm('map__filters', true);
 
   setFilterChangeHandler(ads, MARKERS_TO_SHOW_MAXCOUNT);
-  setMapMarkerMoveEndHandler(filterAds(ads), MARKERS_TO_SHOW_MAXCOUNT);
+  setMapMarkerMoveEndHandler(() => filterAds(ads), MARKERS_TO_SHOW_MAXCOUNT);
 };
 
 const fetchDataErrorHandler = (err) => {

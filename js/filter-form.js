@@ -7,11 +7,11 @@ let housingTypeCriteria = filterForm.querySelector('#housing-type').value;
 
 const setFilterChangeHandler = (data, maxCount) => {
   filterForm.addEventListener('change', (evt) => {
-    const idControl = evt.target.id;
+    const control = evt.target;
 
-    switch (idControl) {
+    switch (control.id) {
       case 'housing-type':
-        housingTypeCriteria = idControl.value;
+        housingTypeCriteria = control.value;
         break;
 
       case 'housing-price':
