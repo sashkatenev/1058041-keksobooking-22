@@ -1,3 +1,5 @@
+const ESCAPE_KEY_CODE = 27;
+
 const createElementFromTemplate = (templateSelector, blockSelector) => {
   const elementTemplate = document.querySelector(templateSelector).content.querySelector(blockSelector);
   const newElement = elementTemplate.cloneNode(true);
@@ -5,7 +7,7 @@ const createElementFromTemplate = (templateSelector, blockSelector) => {
 };
 
 const isEscapeEvent = (evt) => {
-  return (evt.keyCode === 27);
+  return (evt.keyCode === ESCAPE_KEY_CODE);
 };
 
 const enableCollection = (collection) => {
