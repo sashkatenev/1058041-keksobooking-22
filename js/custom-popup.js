@@ -46,11 +46,9 @@ const destroyPopup = (popup) => {
 
 const createKeydownHandler = (element) => {
   return (evt) => {
-    switch (true) {
-      case isEscapeEvent(evt):
-        evt.preventDefault();
-        destroyPopup(element);
-        break;
+    if (isEscapeEvent(evt)) {
+      evt.preventDefault();
+      destroyPopup(element);
     }
   };
 };
