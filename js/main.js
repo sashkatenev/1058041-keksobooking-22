@@ -1,4 +1,5 @@
-import { initForms, enableForm } from './init-forms.js';
+import { initForms } from './init-forms.js';
+import { enableForm } from './util.js';
 import { loadMap, showAdMarkers, setMapMarkerMoveEndHandler } from './map.js';
 import { fetchData } from './data.js';
 import { showPopup } from './custom-popup.js';
