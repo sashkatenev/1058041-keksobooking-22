@@ -4,6 +4,8 @@ import { getHousingCaption } from './data.js';
 import { setAddressInput } from './ad-form.js';
 import { createElementFromTemplate } from './util.js';
 
+const DEFAULT_DECIMAL_PLACES = 5;
+
 const TARGET_AREA = {
   startPoint: {
     latitude: 35.65,
@@ -15,17 +17,19 @@ const TARGET_AREA = {
   },
 };
 
-const MAIN_PIN_ICON_DATA = {
-  iconPath: '../img/main-pin.svg',
-  iconWidth: 52,
-  iconHeight: 52,
-};
+const MapPinIconData = {
+  MAIN_ICON: {
+    iconPath: '../img/main-pin.svg',
+    iconWidth: 52,
+    iconHeight: 52,
+  },
 
-const REGULAR_PIN_ICON_DATA = {
-  iconPath: '../img/pin.svg',
-  iconWidth: 40,
-  iconHeight: 40,
-};
+  REGULAR_ICON: {
+    iconPath: '../img/pin.svg',
+    iconWidth: 40,
+    iconHeight: 40,
+  },
+}
 
 let map = null;
 let mainPinMarker = null;
@@ -40,8 +44,8 @@ const getAreaCenter = () => {
 
 const getMainPoint = () => {
   return {
-    lat: mainPinMarker.getLatLng().lat.toFixed(5),
-    lng: mainPinMarker.getLatLng().lng.toFixed(5),
+    lat: mainPinMarker.getLatLng().lat.toFixed(DEFAULT_DECIMAL_PLACES),
+    lng: mainPinMarker.getLatLng().lng.toFixed(DEFAULT_DECIMAL_PLACES),
   };
 };
 
@@ -74,7 +78,7 @@ const showAdMarkers = (ads, maxCount) => {
     const popup = createElementFromTemplate('#card', '.popup');
     fillMapPopup(popup, ads[i]);
     regularPinMarkers.push(
-      createPinMarker(ads[i].location, false, REGULAR_PIN_ICON_DATA)
+      createPinMarker(ads[i].location, false, MapPinIconData.REGULAR_ICON)
         .addTo(map)
         .bindPopup(popup, { keepInView: true }),
     );
@@ -108,7 +112,7 @@ const loadMap = (className) => {
       },
     ).addTo(map);
 
-    mainPinMarker = createPinMarker(point, true, MAIN_PIN_ICON_DATA).addTo(map);
+    mainPinMarker = createPinMarker(point, true, MapPinIconData.MAIN_ICON).addTo(map);
 
     mainPinMarker.on('move', () => {
       setAddressInput(getMainPoint());
