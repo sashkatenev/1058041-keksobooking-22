@@ -1,3 +1,5 @@
+const ESCAPE_KEY_CODE = 27;
+
 const createElementFromTemplate = (templateSelector, blockSelector) => {
   const elementTemplate = document.querySelector(templateSelector).content.querySelector(blockSelector);
   const newElement = elementTemplate.cloneNode(true);
@@ -5,11 +7,36 @@ const createElementFromTemplate = (templateSelector, blockSelector) => {
 };
 
 const isEscapeEvent = (evt) => {
-  return (evt.keyCode === 27);
+  return (evt.keyCode === ESCAPE_KEY_CODE);
 };
 
-// const isEnterEvent = (evt) => {
-//   return (evt.keyCode === 13) || (evt.keyCode === 32);
-// };
+const enableCollection = (collection) => {
+  collection.forEach((element) => {
+    element.removeAttribute('disabled');
+  });
+};
 
-export { createElementFromTemplate, isEscapeEvent }
+const disableCollection = (collection) => {
+  collection.forEach((element) => {
+    element.setAttribute('disabled', '');
+  });
+};
+
+const enableForm = (className, enableFlag) => {
+  const formElement = document.querySelector(`.${className}`);
+  const disabledFormClass = `${className}--disabled`;
+  const selectors = ['fieldset', 'input', 'select'];
+  if (enableFlag) {
+    formElement.classList.remove(disabledFormClass);
+    selectors.forEach((selector) => {
+      enableCollection(formElement.querySelectorAll(selector));
+    });
+  } else {
+    formElement.classList.add(disabledFormClass);
+    selectors.forEach((selector) => {
+      disableCollection(formElement.querySelectorAll(selector));
+    });
+  }
+}
+
+export { createElementFromTemplate, isEscapeEvent, enableCollection, disableCollection, enableForm }
