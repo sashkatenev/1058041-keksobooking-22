@@ -113,4 +113,4 @@ const setAddressInput = (point) => {
 
 setAdForm();
 
-export { setAdForm, setAddressInput };
+export { setAddressInput };

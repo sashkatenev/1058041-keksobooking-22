@@ -12,13 +12,13 @@ const isEscapeEvent = (evt) => {
 
 const enableCollection = (collection) => {
   collection.forEach((element) => {
-    element.removeAttribute('disabled');
+    element.disabled = false;
   });
 };
 
 const disableCollection = (collection) => {
   collection.forEach((element) => {
-    element.setAttribute('disabled', '');
+    element.disabled = true;
   });
 };
 
