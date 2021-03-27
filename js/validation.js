@@ -28,10 +28,6 @@ const checkCustomValidity = (control) => {
       control.setCustomValidity('Это поле должно содержать число');
       break;
 
-    case (control.type === 'number') && !control.value.match('^[0-9]+$'):  // e.g. '1e4' rejected by the server
-      control.setCustomValidity('Это поле должно содержать только цифры');
-      break;
-
     default:
       control.setCustomValidity('');
       break;

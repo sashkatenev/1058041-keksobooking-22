@@ -91,6 +91,7 @@ const setAdForm = () => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     adForm.querySelector('.ad-form__submit').blur();
+    priceInput.value = Number(priceInput.value);
 
     postData(
       () => {
