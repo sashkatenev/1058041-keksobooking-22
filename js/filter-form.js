@@ -2,8 +2,6 @@ import { getMainPoint } from './map.js';
 import { enableForm } from './util.js';
 
 const FORM_CLASS_NAME = 'map__filters';
-const MATCHING_FEATURE_RANK = 100;
-const BONUSE_FEATURE_RANK = 1;
 
 const filterForm = document.querySelector(`.${FORM_CLASS_NAME}`);
 enableForm('map__filters', false);
@@ -26,15 +24,15 @@ const filterAds = (ads) => {
     return (value.offer.type === housingTypeCriteria || housingTypeCriteria === 'any') &&
       (getPriceGrade(value.offer.price) === priceCriteria || priceCriteria === 'any') &&
       (value.offer.rooms === parseInt(roomsCriteria) || roomsCriteria === 'any') &&
-      (value.offer.guests === parseInt(guestsCriteria) || guestsCriteria === 'any');
+      (value.offer.guests === parseInt(guestsCriteria) || guestsCriteria === 'any') &&
+      (isMatchFeatures(value));
   });
 
   filteredAds.forEach((ad) => {
-    ad.rank = getAdRank(ad);
     ad.distance = getDistance(ad);
   });
 
-  filteredAds.sort(adsComparer);
+  filteredAds.sort((adA, adB) => adA.distance - adB.distance);
   return filteredAds;
 };
 
@@ -75,23 +73,15 @@ const getPriceGrade = (priceValue) => {
   return priceValue < 10000 ? 'low' : priceValue > 50000 ? 'high' : 'middle';
 };
 
-const getAdRank = (ad) => {
-  return ad.offer.features.reduce((accumulator, value) => {
-    return featuresCriteria.includes(value) ? accumulator + MATCHING_FEATURE_RANK : accumulator + BONUSE_FEATURE_RANK;
-  }, 0);
-};
-
 const getDistance = (ad) => {
   const mainPoint = getMainPoint();
-  // return Math.sqrt(Math.pow(mainPoint.lat - ad.location.lat, 2) + Math.pow(mainPoint.lng - ad.location.lng, 2));
   return Math.pow(mainPoint.lat - ad.location.lat, 2) + Math.pow(mainPoint.lng - ad.location.lng, 2);
 };
 
-const adsComparer = (adA, adB) => {
-  if (adB.rank === adA.rank) {
-    return adA.distance - adB.distance;
-  }
-  return adB.rank - adA.rank;
-}
+const isMatchFeatures = (ad) => {
+  return featuresCriteria.every((value) => {
+    return ad.offer.features.includes(value);
+  });
+};
 
 export { createFilterChangeHandler, filterAds };
