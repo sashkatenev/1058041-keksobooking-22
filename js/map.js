@@ -7,12 +7,13 @@ import { filterAds } from './filter-form.js';
 
 const DEFAULT_DECIMAL_PLACES = 5;
 
-const TARGET_AREA = {
-  startPoint: {
+const TargetArea = {
+  START_POINT: {
     latitude: 35.65,
     longitude: 139.7,
   },
-  endPoint: {
+
+  END_POINT: {
     latitude: 35.7,
     longitude: 139.8,
   },
@@ -38,8 +39,8 @@ let regularPinMarkers = [];
 
 const getAreaCenter = () => {
   return {
-    lat: (TARGET_AREA.startPoint.latitude + TARGET_AREA.endPoint.latitude) / 2,
-    lng: (TARGET_AREA.startPoint.longitude + TARGET_AREA.endPoint.longitude) / 2,
+    lat: (TargetArea.START_POINT.latitude + TargetArea.END_POINT.latitude) / 2,
+    lng: (TargetArea.START_POINT.longitude + TargetArea.END_POINT.longitude) / 2,
   };
 };
 
