@@ -39,4 +39,12 @@ const enableForm = (className, enableFlag) => {
   }
 }
 
-export { createElementFromTemplate, isEscapeEvent, enableCollection, disableCollection, enableForm }
+const debounce = (cb, timeout) => {
+  let timerId = null;
+  return () => {
+    clearTimeout(timerId);
+    timerId = setTimeout(cb, timeout);
+  };
+};
+
+export { createElementFromTemplate, isEscapeEvent, enableCollection, disableCollection, enableForm, debounce }

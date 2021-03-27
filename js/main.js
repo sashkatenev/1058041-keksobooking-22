@@ -1,10 +1,11 @@
-import { enableForm } from './util.js';
+import { enableForm, debounce } from './util.js';
 import { loadMap, showAdMarkers, setMapMarkerMoveEndHandler } from './map.js';
 import { fetchData } from './data.js';
 import { showPopup } from './custom-popup.js';
 import { filterAds, setFilterChangeHandler } from './filter-form.js';
 
-const MARKERS_TO_SHOW_MAXCOUNT = 10;
+const MARKERS_TO_SHOW_MAXCOUNT = 3;
+const TIMER_DELAY = 500;
 
 const fetchDataSuccessHandler = (ads) => {
   showAdMarkers(ads, MARKERS_TO_SHOW_MAXCOUNT);

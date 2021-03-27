@@ -124,6 +124,7 @@ const loadMap = (className) => {
 
 const setMapMarkerMoveEndHandler = (cb, maxCount) => {
   mainPinMarker.on('moveend', () => {
+    setAddressInput(getMainPoint());
     showAdMarkers(cb(), maxCount);
   });
 };
