@@ -17,9 +17,12 @@ const roomNumberInput = adForm.querySelector('#room_number');
 const capacityInput = adForm.querySelector('#capacity');
 const avatarInput = adForm.querySelector('#avatar');
 const avatarImage = adForm.querySelector('.ad-form-header__preview img');
+const userPictureInput = adForm.querySelector('.ad-form__input');
+const userPictureContainer = adForm.querySelector('.ad-form__photo');
 
 const adFormChangeHandler = (evt) => {
   const control = evt.target;
+  let userPictureImage = null;
 
   switch (control) {
     case housingTypeInput:
@@ -48,6 +51,13 @@ const adFormChangeHandler = (evt) => {
 
     case avatarInput:
       checkAndLoadImage(avatarInput, avatarImage);
+      break;
+
+    case userPictureInput:
+      userPictureContainer.innerHTML = '';
+      userPictureImage = document.createElement('img');
+      checkAndLoadImage(userPictureInput, userPictureImage);
+      userPictureContainer.appendChild(userPictureImage);
       break;
   }
 };
