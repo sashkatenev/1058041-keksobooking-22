@@ -78,7 +78,7 @@ const showAdMarkers = (ads, maxCount) => {
   const count = Math.min(maxCount, filteredAds.length);
   for (let i = 0; i < count; i++) {
     const popupElement = createElementFromTemplate('#card', '.popup');
-    fillMapPopup(popupElement, ads[i]);
+    fillMapPopup(popupElement, filteredAds[i]);
     regularPinMarkers.push(
       createPinMarker(filteredAds[i].location, false, MapPinIconData.REGULAR_PIN_ICON)
         .addTo(map)
