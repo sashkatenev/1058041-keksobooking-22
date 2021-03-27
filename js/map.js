@@ -3,28 +3,30 @@
 import { getHousingCaption } from './data.js';
 import { setAddressInput } from './ad-form.js';
 import { createElementFromTemplate } from './util.js';
+import { filterAds } from './filter-form.js';
 
 const DEFAULT_DECIMAL_PLACES = 5;
 
-const TARGET_AREA = {
-  startPoint: {
+const TargetArea = {
+  START_POINT: {
     latitude: 35.65,
     longitude: 139.7,
   },
-  endPoint: {
+
+  END_POINT: {
     latitude: 35.7,
     longitude: 139.8,
   },
 };
 
 const MapPinIconData = {
-  MAIN_ICON: {
+  MAIN_PIN_ICON: {
     iconPath: '../img/main-pin.svg',
     iconWidth: 52,
     iconHeight: 52,
   },
 
-  REGULAR_ICON: {
+  REGULAR_PIN_ICON: {
     iconPath: '../img/pin.svg',
     iconWidth: 40,
     iconHeight: 40,
@@ -37,8 +39,8 @@ let regularPinMarkers = [];
 
 const getAreaCenter = () => {
   return {
-    lat: (TARGET_AREA.startPoint.latitude + TARGET_AREA.endPoint.latitude) / 2,
-    lng: (TARGET_AREA.startPoint.longitude + TARGET_AREA.endPoint.longitude) / 2,
+    lat: (TargetArea.START_POINT.latitude + TargetArea.END_POINT.latitude) / 2,
+    lng: (TargetArea.START_POINT.longitude + TargetArea.END_POINT.longitude) / 2,
   };
 };
 
@@ -73,14 +75,15 @@ const createPinMarker = (point, isDraggable, iconData) => {
 
 const showAdMarkers = (ads, maxCount) => {
   removeRegularMarkers();
-  const count = Math.min(maxCount, ads.length);
+  const filteredAds = filterAds(ads);
+  const count = Math.min(maxCount, filteredAds.length);
   for (let i = 0; i < count; i++) {
-    const popup = createElementFromTemplate('#card', '.popup');
-    fillMapPopup(popup, ads[i]);
+    const popupElement = createElementFromTemplate('#card', '.popup');
+    fillMapPopup(popupElement, filteredAds[i]);
     regularPinMarkers.push(
-      createPinMarker(ads[i].location, false, MapPinIconData.REGULAR_ICON)
+      createPinMarker(filteredAds[i].location, false, MapPinIconData.REGULAR_PIN_ICON)
         .addTo(map)
-        .bindPopup(popup, { keepInView: true }),
+        .bindPopup(popupElement, { keepInView: true }),
     );
   }
 };
@@ -112,7 +115,7 @@ const loadMap = (className) => {
       },
     ).addTo(map);
 
-    mainPinMarker = createPinMarker(point, true, MapPinIconData.MAIN_ICON).addTo(map);
+    mainPinMarker = createPinMarker(point, true, MapPinIconData.MAIN_PIN_ICON).addTo(map);
 
     mainPinMarker.on('move', () => {
       setAddressInput(getMainPoint());
@@ -122,9 +125,10 @@ const loadMap = (className) => {
   });
 };
 
-const setMapMarkerMoveEndHandler = (cb, maxCount) => {
+const createMapMarkerMoveEndHandler = (cb) => {
   mainPinMarker.on('moveend', () => {
-    showAdMarkers(cb(), maxCount);
+    setAddressInput(getMainPoint());
+    cb();
   });
 };
 
@@ -162,4 +166,4 @@ const fillMapPopup = (element, data) => {
   element.querySelector('.popup__avatar').src = data.author.avatar;
 };
 
-export { loadMap, showAdMarkers, resetMainPoint, setMapMarkerMoveEndHandler };
+export { loadMap, showAdMarkers, resetMainPoint, createMapMarkerMoveEndHandler, getMainPoint };

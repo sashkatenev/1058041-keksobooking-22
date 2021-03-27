@@ -12,13 +12,13 @@ const isEscapeEvent = (evt) => {
 
 const enableCollection = (collection) => {
   collection.forEach((element) => {
-    element.removeAttribute('disabled');
+    element.disabled = false;
   });
 };
 
 const disableCollection = (collection) => {
   collection.forEach((element) => {
-    element.setAttribute('disabled', '');
+    element.disabled = true;
   });
 };
 
@@ -39,4 +39,12 @@ const enableForm = (className, enableFlag) => {
   }
 }
 
-export { createElementFromTemplate, isEscapeEvent, enableCollection, disableCollection, enableForm }
+const debounce = (cb, timeout) => {
+  let timerId = null;
+  return () => {
+    clearTimeout(timerId);
+    timerId = setTimeout(cb, timeout);
+  };
+};
+
+export { createElementFromTemplate, isEscapeEvent, enableForm, debounce }

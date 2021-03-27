@@ -1,17 +1,18 @@
-import { enableForm } from './util.js';
-import { loadMap, showAdMarkers, setMapMarkerMoveEndHandler } from './map.js';
+import { enableForm, debounce } from './util.js';
+import { loadMap, showAdMarkers, createMapMarkerMoveEndHandler } from './map.js';
 import { fetchData } from './data.js';
 import { showPopup } from './custom-popup.js';
-import { filterAds, setFilterChangeHandler } from './filter-form.js';
+import { createFilterChangeHandler } from './filter-form.js';
 
 const MARKERS_TO_SHOW_MAXCOUNT = 10;
+const TIMER_DELAY = 500;
 
 const fetchDataSuccessHandler = (ads) => {
   showAdMarkers(ads, MARKERS_TO_SHOW_MAXCOUNT);
   enableForm('map__filters', true);
 
-  setFilterChangeHandler(ads, MARKERS_TO_SHOW_MAXCOUNT);
-  setMapMarkerMoveEndHandler(() => filterAds(ads), MARKERS_TO_SHOW_MAXCOUNT);
+  createFilterChangeHandler(debounce(() => showAdMarkers(ads, MARKERS_TO_SHOW_MAXCOUNT), TIMER_DELAY));
+  createMapMarkerMoveEndHandler(() => showAdMarkers(ads, MARKERS_TO_SHOW_MAXCOUNT));
 };
 
 const fetchDataErrorHandler = (err) => {

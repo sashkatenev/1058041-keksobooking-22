@@ -20,8 +20,6 @@ const HOUSING_TYPES = {
   },
 };
 
-let similarNearAds = null;
-
 const getHousingCaption = (value) => {
   return HOUSING_TYPES[value]['caption'];
 };
@@ -34,8 +32,7 @@ const fetchData = (succesHandler, errorHandler) => {
   fetch(GET_DATA_URL)
     .then((response) => {
       if (response.ok) {
-        similarNearAds = response.json();
-        return similarNearAds;
+        return response.json();
       }
       throw new Error(`${response.status} - ${response.statusText}`);
     })
@@ -68,8 +65,4 @@ const postData = (succesHandler, errorHandler, body) => {
     })
 };
 
-const getData = () => {
-  return similarNearAds;
-};
-
-export { getHousingCaption, getHousingMinPrice, fetchData, postData, getData };
+export { getHousingCaption, getHousingMinPrice, fetchData, postData };
