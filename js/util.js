@@ -47,4 +47,4 @@ const debounce = (cb, timeout) => {
   };
 };
 
-export { createElementFromTemplate, isEscapeEvent, enableCollection, disableCollection, enableForm, debounce }
+export { createElementFromTemplate, isEscapeEvent, enableForm, debounce }

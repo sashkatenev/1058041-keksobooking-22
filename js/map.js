@@ -3,6 +3,7 @@
 import { getHousingCaption } from './data.js';
 import { setAddressInput } from './ad-form.js';
 import { createElementFromTemplate } from './util.js';
+import { filterAds } from './filter-form.js';
 
 const DEFAULT_DECIMAL_PLACES = 5;
 
@@ -18,13 +19,13 @@ const TARGET_AREA = {
 };
 
 const MapPinIconData = {
-  MAIN_ICON: {
+  MAIN_PIN_ICON: {
     iconPath: '../img/main-pin.svg',
     iconWidth: 52,
     iconHeight: 52,
   },
 
-  REGULAR_ICON: {
+  REGULAR_PIN_ICON: {
     iconPath: '../img/pin.svg',
     iconWidth: 40,
     iconHeight: 40,
@@ -73,14 +74,15 @@ const createPinMarker = (point, isDraggable, iconData) => {
 
 const showAdMarkers = (ads, maxCount) => {
   removeRegularMarkers();
-  const count = Math.min(maxCount, ads.length);
+  const filteredAds = filterAds(ads);
+  const count = Math.min(maxCount, filteredAds.length);
   for (let i = 0; i < count; i++) {
-    const popup = createElementFromTemplate('#card', '.popup');
-    fillMapPopup(popup, ads[i]);
+    const popupElement = createElementFromTemplate('#card', '.popup');
+    fillMapPopup(popupElement, ads[i]);
     regularPinMarkers.push(
-      createPinMarker(ads[i].location, false, MapPinIconData.REGULAR_ICON)
+      createPinMarker(filteredAds[i].location, false, MapPinIconData.REGULAR_PIN_ICON)
         .addTo(map)
-        .bindPopup(popup, { keepInView: true }),
+        .bindPopup(popupElement, { keepInView: true }),
     );
   }
 };
@@ -112,7 +114,7 @@ const loadMap = (className) => {
       },
     ).addTo(map);
 
-    mainPinMarker = createPinMarker(point, true, MapPinIconData.MAIN_ICON).addTo(map);
+    mainPinMarker = createPinMarker(point, true, MapPinIconData.MAIN_PIN_ICON).addTo(map);
 
     mainPinMarker.on('move', () => {
       setAddressInput(getMainPoint());
@@ -122,10 +124,10 @@ const loadMap = (className) => {
   });
 };
 
-const setMapMarkerMoveEndHandler = (cb, maxCount) => {
+const createMapMarkerMoveEndHandler = (cb) => {
   mainPinMarker.on('moveend', () => {
     setAddressInput(getMainPoint());
-    showAdMarkers(cb(), maxCount);
+    cb();
   });
 };
 
@@ -163,4 +165,4 @@ const fillMapPopup = (element, data) => {
   element.querySelector('.popup__avatar').src = data.author.avatar;
 };
 
-export { loadMap, showAdMarkers, resetMainPoint, setMapMarkerMoveEndHandler, getMainPoint };
+export { loadMap, showAdMarkers, resetMainPoint, createMapMarkerMoveEndHandler, getMainPoint };

@@ -1,4 +1,4 @@
-import { showAdMarkers, getMainPoint } from './map.js';
+import { getMainPoint } from './map.js';
 import { enableForm } from './util.js';
 
 const FORM_CLASS_NAME = 'map__filters';
@@ -14,11 +14,10 @@ let roomsCriteria = filterForm.querySelector('#housing-rooms').value;
 let guestsCriteria = filterForm.querySelector('#housing-guests').value;
 let featuresCriteria = [];
 
-const setFilterChangeHandler = (data, maxCount) => {
+const createFilterChangeHandler = (cb) => {
   filterForm.addEventListener('change', (evt) => {
     setCriteria(evt.target);
-    const filteredData = filterAds(data);
-    showAdMarkers(filteredData, maxCount);
+    cb();
   });
 };
 
@@ -35,7 +34,7 @@ const filterAds = (ads) => {
     ad.distance = getDistance(ad);
   });
 
-  filteredAds.sort(compareAds);
+  filteredAds.sort(adsComparer);
   return filteredAds;
 };
 
@@ -84,14 +83,15 @@ const getAdRank = (ad) => {
 
 const getDistance = (ad) => {
   const mainPoint = getMainPoint();
-  return Math.sqrt(Math.pow(mainPoint.lat - ad.location.lat, 2) + Math.pow(mainPoint.lng - ad.location.lng, 2));
+  // return Math.sqrt(Math.pow(mainPoint.lat - ad.location.lat, 2) + Math.pow(mainPoint.lng - ad.location.lng, 2));
+  return Math.pow(mainPoint.lat - ad.location.lat, 2) + Math.pow(mainPoint.lng - ad.location.lng, 2);
 };
 
-const compareAds = (adA, adB) => {
+const adsComparer = (adA, adB) => {
   if (adB.rank === adA.rank) {
     return adA.distance - adB.distance;
   }
   return adB.rank - adA.rank;
 }
 
-export { setFilterChangeHandler, filterAds };
+export { createFilterChangeHandler, filterAds };
