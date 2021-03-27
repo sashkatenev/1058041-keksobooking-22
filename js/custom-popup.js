@@ -1,26 +1,26 @@
 import { createElementFromTemplate, isEscapeEvent } from './util.js';
 
-let popup = null;
+let popupElement = null;
 let popupKeydownHandler = null;
 let closePopupElement = null;
 let textPopupElement = null;
 
 const showPopup = (templateSelector, blockSelector, popupMessage) => {
-  popup = createElementFromTemplate(templateSelector, blockSelector);
-  popup.style.zIndex = 400;
+  popupElement = createElementFromTemplate(templateSelector, blockSelector);
+  popupElement.style.zIndex = 400;
   if (popupMessage) {
-    popup.querySelector('p').textContent = popupMessage;
+    popupElement.querySelector('p').textContent = popupMessage;
   }
 
-  popupKeydownHandler = createKeydownHandler(popup);
+  popupKeydownHandler = createKeydownHandler(popupElement);
   document.addEventListener('keydown', popupKeydownHandler);
 
-  closePopupElement = popup.querySelector('.error__button');
-  textPopupElement = popup.querySelector('p');
+  closePopupElement = popupElement.querySelector('.error__button');
+  textPopupElement = popupElement.querySelector('p');
 
   document.addEventListener('click', clickHandler);
 
-  document.querySelector('main').append(popup);
+  document.querySelector('main').append(popupElement);
 };
 
 const clickHandler = (evt) => {
@@ -32,7 +32,7 @@ const clickHandler = (evt) => {
 
     case closePopupElement:
     default:
-      destroyPopup(popup);
+      destroyPopup(popupElement);
       break;
   }
 };

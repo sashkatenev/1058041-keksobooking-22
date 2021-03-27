@@ -98,7 +98,7 @@ const setAdForm = () => {
         adForm.reset();
       },
       (err) => {
-        showPopup('#error', '.error', `Ошибка загрузки данных (${err})`);
+        showPopup('#error', '.error', `Ошибка отправки данных (${err})`);
       },
       new FormData(evt.target),
     );
