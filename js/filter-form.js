@@ -1,4 +1,4 @@
-import { showAdMarkers } from './map.js';
+import { showAdMarkers, getMainPoint } from './map.js';
 import { enableForm } from './util.js';
 
 const FORM_CLASS_NAME = 'map__filters';
@@ -30,12 +30,12 @@ const filterAds = (ads) => {
       (value.offer.guests === parseInt(guestsCriteria) || guestsCriteria === 'any');
   });
 
-  filteredAds.forEach((value) => {
-    value.rank = getAdRank(value);
+  filteredAds.forEach((ad) => {
+    ad.rank = getAdRank(ad);
+    ad.distance = getDistance(ad);
   });
 
-  filteredAds.sort((adA, adB) => adB.rank - adA.rank);
-  debugger;
+  filteredAds.sort(compareAds);
   return filteredAds;
 };
 
@@ -82,8 +82,16 @@ const getAdRank = (ad) => {
   }, 0);
 };
 
-// const compateAds = (adA, adB) => {
-//   return adB.rank - adA.rank;
-// }
+const getDistance = (ad) => {
+  const mainPoint = getMainPoint();
+  return Math.sqrt(Math.pow(mainPoint.lat - ad.location.lat, 2) + Math.pow(mainPoint.lng - ad.location.lng, 2));
+};
+
+const compareAds = (adA, adB) => {
+  if (adB.rank === adA.rank) {
+    return adA.distance - adB.distance;
+  }
+  return adB.rank - adA.rank;
+}
 
 export { setFilterChangeHandler, filterAds };

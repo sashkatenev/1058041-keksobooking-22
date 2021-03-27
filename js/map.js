@@ -162,4 +162,4 @@ const fillMapPopup = (element, data) => {
   element.querySelector('.popup__avatar').src = data.author.avatar;
 };
 
-export { loadMap, showAdMarkers, resetMainPoint, setMapMarkerMoveEndHandler };
+export { loadMap, showAdMarkers, resetMainPoint, setMapMarkerMoveEndHandler, getMainPoint };
