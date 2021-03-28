@@ -2,7 +2,7 @@ import { getHousingMinPrice, postData } from './data.js';
 import { resetMainPoint } from './map.js';
 import { checkCustomValidity, checkAndLoadImage } from './validation.js';
 import { showPopup } from './custom-popup.js';
-import { enableForm, setElementAttributes } from './util.js';
+import { enableForm, setElementAttributes, generateElementEvent } from './util.js';
 
 const FORM_CLASS_NAME = 'ad-form';
 
@@ -68,7 +68,7 @@ const adFormInvalidHandler = (evt) => {
 
 const adFormResetHandler = () => {
   setTimeout(() => {
-    roomNumberInput.selectedIndex = -1;
+    generateElementEvent(roomNumberInput, 'change');
     resetMainPoint();
     setElementAttributes(avatarImage, { src: 'img/muffin-grey.svg', title: 'Фотография не выбрана' });
     userPictureContainer.innerHTML = '';
@@ -78,9 +78,10 @@ const adFormResetHandler = () => {
 const setAdForm = () => {
   priceInput.min = priceInput.placeholder = getHousingMinPrice(housingTypeInput.value);
   priceInput.max = '1000000';
-  roomNumberInput.selectedIndex = -1;
 
   adForm.addEventListener('change', adFormChangeHandler);
+
+  generateElementEvent(roomNumberInput, 'change');
 
   [titleInput, priceInput, roomNumberInput].forEach((element) => {
     ['invalid', 'input'].forEach((event) => {

@@ -62,4 +62,10 @@ const debounce = (cb, timeout) => {
   };
 };
 
-export { createElementFromTemplate, setElementAttributes, isEscapeEvent, enableForm, debounce }
+const generateElementEvent = (element, eventName) => {
+  const evt = document.createEvent('HTMLEvents');
+  evt.initEvent(eventName, true, true);
+  element.dispatchEvent(evt);
+};
+
+export { createElementFromTemplate, setElementAttributes, isEscapeEvent, enableForm, debounce, generateElementEvent }
