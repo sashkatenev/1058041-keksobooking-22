@@ -5,8 +5,8 @@
 *.pdf
 *.psd
 *.sublime*
-build/main.bundle.js
-build/main.bundle.js.map
+build/js/main.bundle.js
+build/js/main.bundle.js.map
 node_modules/
 npm-debug.log*
 Thumbs.db
