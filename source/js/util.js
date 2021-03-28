@@ -1,9 +1,24 @@
 const ESCAPE_KEY_CODE = 27;
 
-const createElementFromTemplate = (templateSelector, blockSelector) => {
+const createElementFromTemplate = (templateSelector, blockSelector, attributes) => {
   const elementTemplate = document.querySelector(templateSelector).content.querySelector(blockSelector);
   const newElement = elementTemplate.cloneNode(true);
+
+  if (attributes) {
+    for (let key in attributes) {
+      newElement[key] = attributes[key];
+    }
+  }
+
   return newElement;
+};
+
+const setElementAttributes = (element, attributes) => {
+  if (attributes) {
+    for (let key in attributes) {
+      element[key] = attributes[key];
+    }
+  }
 };
 
 const isEscapeEvent = (evt) => {
@@ -47,4 +62,4 @@ const debounce = (cb, timeout) => {
   };
 };
 
-export { createElementFromTemplate, isEscapeEvent, enableForm, debounce }
+export { createElementFromTemplate, setElementAttributes, isEscapeEvent, enableForm, debounce }

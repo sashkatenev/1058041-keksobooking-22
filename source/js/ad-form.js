@@ -2,7 +2,7 @@ import { getHousingMinPrice, postData } from './data.js';
 import { resetMainPoint } from './map.js';
 import { checkCustomValidity, checkAndLoadImage } from './validation.js';
 import { showPopup } from './custom-popup.js';
-import { enableForm } from './util.js';
+import { enableForm, setElementAttributes } from './util.js';
 
 const FORM_CLASS_NAME = 'ad-form';
 
@@ -70,6 +70,8 @@ const adFormResetHandler = () => {
   setTimeout(() => {
     roomNumberInput.selectedIndex = -1;
     resetMainPoint();
+    setElementAttributes(avatarImage, { src: 'img/muffin-grey.svg', title: 'Фотография не выбрана' });
+    userPictureContainer.innerHTML = '';
   }, 0);
 };
 
