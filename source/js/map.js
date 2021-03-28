@@ -21,13 +21,13 @@ const TargetArea = {
 
 const MapPinIconData = {
   MAIN_PIN_ICON: {
-    iconPath: '../img/main-pin.svg',
+    iconPath: 'img/main-pin.svg',
     iconWidth: 52,
     iconHeight: 52,
   },
 
   REGULAR_PIN_ICON: {
-    iconPath: '../img/pin.svg',
+    iconPath: 'img/pin.svg',
     iconWidth: 40,
     iconHeight: 40,
   },
