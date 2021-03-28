@@ -4,7 +4,7 @@ import { enableForm } from './util.js';
 const FORM_CLASS_NAME = 'map__filters';
 
 const filterForm = document.querySelector(`.${FORM_CLASS_NAME}`);
-enableForm('map__filters', false);
+enableForm(FORM_CLASS_NAME, false);
 
 let housingTypeCriteria  = filterForm.querySelector('#housing-type').value;
 let priceCriteria  = filterForm.querySelector('#housing-price').value;
